@@ -1,35 +1,3 @@
-/// <reference path="jquery.d.ts" />
-////////////////////////////////////////////////////////////////////////////////
-// Variables                                                                  //
-////////////////////////////////////////////////////////////////////////////////
-/*
- * Constants
- */
-var FIXED_TIMESTEP = 1 / 60;
-var FIXED_TIMESTEP_MS = 1000 * FIXED_TIMESTEP;
-/*
- * Mouse variables
- */
-var mouseX;
-var mouseY;
-/*
- * Canvas variables
- */
-var gameCanvas;
-var ctx;
-/*
- * Loop variables
- */
-var frameId;
-var previousTimestamp;
-var unsimulatedTime = 0;
-////////////////////////////////////////////////////////////////////////////////
-// Utilities                                                                  //
-////////////////////////////////////////////////////////////////////////////////
-function fitCanvasToWindow(canvas) {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
 var currentChunk = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -40,80 +8,148 @@ var currentChunk = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ];
-////////////////////////////////////////////////////////////////////////////////
-// Loop                                                                       //
-////////////////////////////////////////////////////////////////////////////////
-var offset = 0;
-var offsetTile = 0;
-var tileSize = 100;
-function update(dt) {
-    offset += 5 * tileSize * dt;
-    if (offset >= tileSize) {
-        offset -= tileSize;
-        offsetTile += 1;
+var Game = (function () {
+    function Game(tileSpeed, tileSize) {
+        this.tileSpeed = tileSpeed;
+        this.tileSize = tileSize;
+        this.offset = 0;
+        this.offsetTile = 0;
     }
-}
-function render() {
-    var ro = Math.round(offset);
-    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    for (var row = 0; row < 8; row++) {
-        for (var col = 0; col < 10; col++) {
-            var nc = col + offsetTile;
-            if (currentChunk[row][nc % 20]) {
-                ctx.fillRect(col * tileSize - ro, row * tileSize, tileSize, tileSize);
+    Game.prototype.update = function (dt) {
+        this.offset += this.tileSpeed * this.tileSize * dt;
+        if (this.offset >= this.tileSize) {
+            this.offset -= this.tileSize;
+            this.offsetTile += 1;
+        }
+    };
+    Game.prototype.render = function (ctx) {
+        var ro = Math.round(this.offset);
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        for (var row = 0; row < 8; row++) {
+            for (var col = 0; col < 10; col++) {
+                var nc = col + this.offsetTile;
+                if (currentChunk[row][nc % 20]) {
+                    ctx.fillRect(col * this.tileSize - ro, row * this.tileSize, this.tileSize, this.tileSize);
+                }
+            }
+            if (currentChunk[row][(10 + this.offsetTile) % 20]) {
+                ctx.fillRect(10 * this.tileSize - ro, row * this.tileSize, ro, this.tileSize);
             }
         }
-        if (currentChunk[row][(10 + offsetTile) % 20]) {
-            ctx.fillRect(10 * tileSize - ro, row * tileSize, ro, tileSize);
-        }
+        ctx.fillRect(this.tileSize, 4 * this.tileSize, this.tileSize, this.tileSize);
+    };
+    return Game;
+}());
+var Looper = (function () {
+    function Looper(fixedTimestep, updatable, renderable, ctx) {
+        var _this = this;
+        this.fixedTimestep = fixedTimestep;
+        this.updatable = updatable;
+        this.renderable = renderable;
+        this.ctx = ctx;
+        this.unsimulatedTime = 0;
+        // Captures "this" correctly for requestAnimationFrame
+        this.loop = function (timestamp) {
+            var deltaTimestamp = timestamp - _this.previousTimestamp;
+            _this.unsimulatedTime += deltaTimestamp;
+            _this.previousTimestamp = timestamp;
+            var updateCount = 0;
+            while (_this.unsimulatedTime >= _this.fixedTimestepMs) {
+                _this.updatable.update(_this.fixedTimestep);
+                _this.unsimulatedTime -= _this.fixedTimestepMs;
+                updateCount += 1;
+                if (updateCount >= 10) {
+                    _this.unsimulatedTime = 0;
+                    break;
+                }
+            }
+            if (updateCount > 0) {
+                _this.renderable.render(_this.ctx);
+            }
+            window.requestAnimationFrame(_this.loop);
+        };
+        this.fixedTimestepMs = 1000 * this.fixedTimestep;
     }
-    ctx.fillRect(tileSize, 4 * tileSize, tileSize, tileSize);
-}
-function mainLoop(timestamp) {
-    var deltaTimestamp = timestamp - previousTimestamp;
-    unsimulatedTime += deltaTimestamp;
-    previousTimestamp = timestamp;
-    var updateCount = 0;
-    while (unsimulatedTime >= FIXED_TIMESTEP_MS) {
-        update(FIXED_TIMESTEP);
-        unsimulatedTime -= FIXED_TIMESTEP_MS;
-        updateCount += 1;
-        if (updateCount >= 10) {
-            unsimulatedTime = 0;
-            break;
-        }
-    }
-    if (updateCount > 0) {
-        render();
-    }
-    window.requestAnimationFrame(mainLoop);
-}
-////////////////////////////////////////////////////////////////////////////////
-// Main                                                                       //
-////////////////////////////////////////////////////////////////////////////////
+    Looper.prototype.start = function () {
+        var _this = this;
+        this.frameId = window.requestAnimationFrame(function (timestamp) {
+            _this.previousTimestamp = timestamp;
+            _this.frameId = window.requestAnimationFrame(_this.loop);
+        });
+    };
+    Looper.prototype.stop = function () {
+        window.cancelAnimationFrame(this.frameId);
+    };
+    return Looper;
+}());
+var mouseX;
+var mouseY;
 function init() {
-    // Variables
+    /*
+     * Mouse
+     */
     mouseX = window.innerWidth / 2;
     mouseY = window.innerHeight / 2;
-    gameCanvas = document.getElementById("game");
-    ctx = gameCanvas.getContext("2d");
-    // Handlers
     window.onmousemove = function (event) {
         mouseX = event.pageX;
         mouseY = event.pageY;
     };
+    /*
+     * Canvas
+     */
+    var gameCanvas = document.getElementById("game");
     window.onresize = function (event) {
         fitCanvasToWindow(gameCanvas);
     };
     fitCanvasToWindow(gameCanvas);
+    var ctx = gameCanvas.getContext("2d");
     ctx.font = "24px Arial";
     ctx.fillText("Click to Start", 100, 100);
+    /*
+     * Game
+     */
+    var game = new Game(5, 32);
+    var looper = new Looper(1 / 60, game, game, ctx);
     window.onclick = function () {
-        // Loop
-        frameId = window.requestAnimationFrame(function (timestamp) {
-            previousTimestamp = timestamp;
-            frameId = window.requestAnimationFrame(mainLoop);
-        });
+        looper.start();
     };
 }
 window.onload = function (event) { return init(); };
+var Vector = (function () {
+    function Vector(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+    return Vector;
+}());
+var BoundingBox = (function () {
+    function BoundingBox(x, y, width, height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+    BoundingBox.prototype.right = function () {
+        return this.x + this.width;
+    };
+    BoundingBox.prototype.bottom = function () {
+        return this.y + this.height;
+    };
+    return BoundingBox;
+}());
+var GRAVITY = 1000;
+var Player = (function () {
+    function Player(position, velocity) {
+        this.position = position;
+        this.velocity = velocity;
+    }
+    Player.prototype.update = function (dt) {
+    };
+    Player.prototype.render = function (ctx) {
+    };
+    return Player;
+}());
+function fitCanvasToWindow(canvas) {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
