@@ -1,39 +1,25 @@
-let mouseX: number;
-let mouseY: number;
-
 function init(): void {
-    /*
-     * Mouse
-     */
-    mouseX = window.innerWidth / 2;
-    mouseY = window.innerHeight / 2;
-    window.onmousemove = (event) => {
-        mouseX = event.pageX;
-        mouseY = event.pageY;
-    };
+    Mouse.init();
+    Keyboard.init();
+    ChunkManager.init();
 
-    /*
-     * Canvas
-     */
     let gameCanvas = <HTMLCanvasElement> document.getElementById("game");
-    window.onresize = (event) => {
-        fitCanvasToWindow(gameCanvas);
-    };
-    fitCanvasToWindow(gameCanvas);
     let ctx = gameCanvas.getContext("2d");
+
+    window.onresize = (event) => {
+        CanvasUtilities.fitCanvasToWindow(gameCanvas);
+    };
+    CanvasUtilities.fitCanvasToWindow(gameCanvas);
+
     ctx.font = "24px Arial";
     ctx.fillText("Click to Start", 100, 100);
 
-    /*
-     * Game
-     */
-    let game = new Game(5, 32);
+    let game = new Game(5);
     let looper = new Looper(1/60, game, game, ctx);
 
-    window.onclick = () => {
+    gameCanvas.onclick = (event) => {
         looper.start();
     };
-
 }
 
 window.onload = (event) => init();
