@@ -3,6 +3,7 @@ class Game implements Updatable, Renderable {
     private offsetTile: number = 0;
     private currentChunk: Chunk;
     private nextChunk: Chunk;
+    private score: number = 0;
 
     public player: Player;
 
@@ -13,9 +14,11 @@ class Game implements Updatable, Renderable {
     }
 
     public update(dt: number): void {
-        this.offset += this.tileSpeed * ChunkManager.TILE_SIZE * dt;
-        if (this.offset >= ChunkManager.TILE_SIZE) {
-            this.offset -= ChunkManager.TILE_SIZE;
+        this.score += 100 * dt;
+
+        this.offset += this.tileSpeed * ChunkManager.tileSize * dt;
+        if (this.offset >= ChunkManager.tileSize) {
+            this.offset -= ChunkManager.tileSize;
             this.offsetTile += 1;
         }
         if (this.offsetTile >= ChunkManager.CHUNK_WIDTH) {
@@ -28,31 +31,49 @@ class Game implements Updatable, Renderable {
     }
 
     public render(ctx: CanvasRenderingContext2D): void {
-        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        CanvasUtilities.clear(ctx);
 
         this.currentChunk.render(ctx,
                                  this.offsetTile,
                                  ChunkManager.CHUNK_WIDTH,
-                                 -this.offsetTile * ChunkManager.TILE_SIZE
+                                 -this.offsetTile * ChunkManager.tileSize
                                      - this.offset);
         this.nextChunk.render(ctx,
                               0,
                               this.offsetTile + 1,
-                              ChunkManager.CHUNK_WIDTH * ChunkManager.TILE_SIZE
-                                  - this.offsetTile * ChunkManager.TILE_SIZE
+                              ChunkManager.CHUNK_WIDTH * ChunkManager.tileSize
+                                  - this.offsetTile * ChunkManager.tileSize
                                   - this.offset);
 
-        // TODO remove world bound indicator
-        ctx.fillStyle = "rgba(255, 0, 0, 0.9)"
-        ctx.fillRect(ChunkManager.CHUNK_WIDTH * ChunkManager.TILE_SIZE, 0, 10000, 10000);
+        CanvasUtilities.fillStrokeRect(
+            ctx,
+            "#000000",
+            "#000000",
+            ChunkManager.CHUNK_WIDTH * ChunkManager.tileSize,
+            0,
+            window.innerWidth,
+            window.innerHeight,
+            1
+        );
 
         this.player.render(ctx);
+
+        ctx.font = "18px Inconsolata";
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillText("     Score: " + Math.round(this.score),
+                     window.innerWidth - 200,
+                     38);
+        if (SaveState.getHighScore() != null) {
+            ctx.fillText("High Score: " + Math.round(SaveState.getHighScore()),
+                         window.innerWidth - 200,
+                         76);
+        }
     }
 
     public tileInformationFromCoordinate(x: number,
                                          y: number): TileInformation {
-        let row = Math.floor(y / ChunkManager.TILE_SIZE);
-        let col = Math.floor(x / ChunkManager.TILE_SIZE);
+        let row = Math.floor(y / ChunkManager.tileSize);
+        let col = Math.floor(x / ChunkManager.tileSize);
 
         if (row >= ChunkManager.CHUNK_HEIGHT || row < 0 ||
             col >= ChunkManager.CHUNK_WIDTH || col < 0) {
@@ -67,5 +88,12 @@ class Game implements Updatable, Renderable {
                 return this.currentChunk.tileArray[row][col];
             }
         }
+    }
+
+    public restart(): void {
+        if (this.score > SaveState.getHighScore()) {
+            SaveState.setHighScore(this.score);
+        }
+        Main.restart();
     }
 }

@@ -1,39 +1,58 @@
-function init(): void {
-    Mouse.init();
-    Keyboard.init();
-    ChunkManager.init();
-
-    let gameCanvas = <HTMLCanvasElement> document.getElementById("game");
-    let ctx = gameCanvas.getContext("2d");
-
-    window.onresize = (event) => {
-        CanvasUtilities.fitCanvasToWindow(gameCanvas);
-    };
-    CanvasUtilities.fitCanvasToWindow(gameCanvas);
-
-    ctx.font = "24px Arial";
-    ctx.fillText("Click to Start", 100, 100);
-
+namespace Main {
+    let gameCanvas: HTMLCanvasElement;
+    let ctx: CanvasRenderingContext2D;
+    let looper: Looper;
     let player: Player;
     let game: Game;
-    let looper: Looper;
 
-    game = new Game(10,
-                    100 * ChunkManager.TILE_SIZE);
-    player = new Player(game,
-                        new BoundingBox(3 * ChunkManager.TILE_SIZE,
-                                        0,
-                                        ChunkManager.TILE_SIZE,
-                                        ChunkManager.TILE_SIZE),
-                        new Vector(0, 0),
-                        30 * ChunkManager.TILE_SIZE,
-                        2);
-    game.player = player;
-    looper = new Looper(1/60, game, game, ctx);
-
-    gameCanvas.onclick = (event) => {
+    export function restart() {
+        looper.stop();
+        loadGame();
         looper.start();
-    };
-}
+    }
 
-window.onload = (event) => init();
+    export function loadGame() {
+        game = new Game(10,
+                        100 * ChunkManager.tileSize);
+        player = new Player(game,
+                            new BoundingBox(3 * ChunkManager.tileSize,
+                                            0,
+                                            ChunkManager.tileSize,
+                                            ChunkManager.tileSize),
+                            new Vector(0, 0),
+                            30 * ChunkManager.tileSize,
+                            2);
+        game.player = player;
+        looper = new Looper(1/60, game, game, ctx);
+    }
+
+    export function init(): void {
+        Mouse.init();
+        Keyboard.init();
+        ChunkManager.init();
+
+        gameCanvas = <HTMLCanvasElement> document.getElementById("game");
+        ctx = gameCanvas.getContext("2d");
+
+        let handleResize = () => {
+            CanvasUtilities.fitCanvasToWindow(gameCanvas);
+            ChunkManager.tileSize = window.innerHeight / ChunkManager.CHUNK_HEIGHT;
+        }
+        window.onresize = (event) => {
+            handleResize();
+        };
+        handleResize();
+
+        ctx.font
+        loadGame();
+
+        let startButton = <HTMLElement> document.getElementById("start-button");
+        startButton.onclick = (event) => {
+            startButton.style.display = "none";
+            gameCanvas.style.display = "block";
+            looper.start();
+        }
+    }
+
+    window.onload = (event) => init();
+}

@@ -1,32 +1,50 @@
 var idArray1 = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 var idArray2 = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 var idArray3 = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
 ];
 var TileInformation = (function () {
     function TileInformation(id) {
@@ -45,12 +63,19 @@ var TileInformation = (function () {
     TileInformation.prototype.getFillStyle = function () {
         return TileInformation.tileFillStyleMap[this.id];
     };
+    TileInformation.prototype.getStrokeStyle = function () {
+        return TileInformation.tileStrokeStyleMap[this.id];
+    };
     TileInformation.prototype.isBlocked = function () {
         return TileInformation.tileBlockedMap[this.id];
     };
     TileInformation.tileFillStyleMap = {
-        0: "white",
-        1: "black"
+        0: "#000000",
+        1: "#333333"
+    };
+    TileInformation.tileStrokeStyleMap = {
+        0: "#000000",
+        1: "#222222"
     };
     TileInformation.tileBlockedMap = {
         0: false,
@@ -68,8 +93,7 @@ var Chunk = (function () {
         for (var row = 0; row < this.tileArray.length; row++) {
             for (var col = leftBound; col < rightBound; col++) {
                 var tileInfo = this.tileArray[row][col];
-                ctx.fillStyle = tileInfo.getFillStyle();
-                ctx.fillRect(col * ChunkManager.TILE_SIZE + offset, row * ChunkManager.TILE_SIZE, ChunkManager.TILE_SIZE, ChunkManager.TILE_SIZE);
+                CanvasUtilities.fillStrokeRect(ctx, tileInfo.getFillStyle(), tileInfo.getStrokeStyle(), col * ChunkManager.tileSize + offset, row * ChunkManager.tileSize, ChunkManager.tileSize, ChunkManager.tileSize, 1);
             }
         }
     };
@@ -78,8 +102,8 @@ var Chunk = (function () {
 var ChunkManager;
 (function (ChunkManager) {
     ChunkManager.CHUNK_WIDTH = 20;
-    ChunkManager.CHUNK_HEIGHT = 8;
-    ChunkManager.TILE_SIZE = 32;
+    ChunkManager.CHUNK_HEIGHT = 14;
+    ChunkManager.tileSize = 32;
     function init() {
         ChunkManager.chunkLoaders = [];
         ChunkManager.chunkLoaders.push(function () { return new Chunk(TileInformation.loadFromIdArray(idArray1)); });
@@ -103,13 +127,15 @@ var Game = (function () {
         this.gravity = gravity;
         this.offset = 0;
         this.offsetTile = 0;
+        this.score = 0;
         this.currentChunk = ChunkManager.generateRandomChunk();
         this.nextChunk = ChunkManager.generateRandomChunk();
     }
     Game.prototype.update = function (dt) {
-        this.offset += this.tileSpeed * ChunkManager.TILE_SIZE * dt;
-        if (this.offset >= ChunkManager.TILE_SIZE) {
-            this.offset -= ChunkManager.TILE_SIZE;
+        this.score += 100 * dt;
+        this.offset += this.tileSpeed * ChunkManager.tileSize * dt;
+        if (this.offset >= ChunkManager.tileSize) {
+            this.offset -= ChunkManager.tileSize;
             this.offsetTile += 1;
         }
         if (this.offsetTile >= ChunkManager.CHUNK_WIDTH) {
@@ -120,20 +146,24 @@ var Game = (function () {
         this.player.update(dt);
     };
     Game.prototype.render = function (ctx) {
-        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-        this.currentChunk.render(ctx, this.offsetTile, ChunkManager.CHUNK_WIDTH, -this.offsetTile * ChunkManager.TILE_SIZE
+        CanvasUtilities.clear(ctx);
+        this.currentChunk.render(ctx, this.offsetTile, ChunkManager.CHUNK_WIDTH, -this.offsetTile * ChunkManager.tileSize
             - this.offset);
-        this.nextChunk.render(ctx, 0, this.offsetTile + 1, ChunkManager.CHUNK_WIDTH * ChunkManager.TILE_SIZE
-            - this.offsetTile * ChunkManager.TILE_SIZE
+        this.nextChunk.render(ctx, 0, this.offsetTile + 1, ChunkManager.CHUNK_WIDTH * ChunkManager.tileSize
+            - this.offsetTile * ChunkManager.tileSize
             - this.offset);
-        // TODO remove world bound indicator
-        ctx.fillStyle = "rgba(255, 0, 0, 0.9)";
-        ctx.fillRect(ChunkManager.CHUNK_WIDTH * ChunkManager.TILE_SIZE, 0, 10000, 10000);
+        CanvasUtilities.fillStrokeRect(ctx, "#000000", "#000000", ChunkManager.CHUNK_WIDTH * ChunkManager.tileSize, 0, window.innerWidth, window.innerHeight, 1);
         this.player.render(ctx);
+        ctx.font = "18px Inconsolata";
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillText("     Score: " + Math.round(this.score), window.innerWidth - 200, 38);
+        if (SaveState.getHighScore() != null) {
+            ctx.fillText("High Score: " + Math.round(SaveState.getHighScore()), window.innerWidth - 200, 76);
+        }
     };
     Game.prototype.tileInformationFromCoordinate = function (x, y) {
-        var row = Math.floor(y / ChunkManager.TILE_SIZE);
-        var col = Math.floor(x / ChunkManager.TILE_SIZE);
+        var row = Math.floor(y / ChunkManager.tileSize);
+        var col = Math.floor(x / ChunkManager.tileSize);
         if (row >= ChunkManager.CHUNK_HEIGHT || row < 0 ||
             col >= ChunkManager.CHUNK_WIDTH || col < 0) {
             return null;
@@ -148,6 +178,12 @@ var Game = (function () {
                 return this.currentChunk.tileArray[row][col];
             }
         }
+    };
+    Game.prototype.restart = function () {
+        if (this.score > SaveState.getHighScore()) {
+            SaveState.setHighScore(this.score);
+        }
+        Main.restart();
     };
     return Game;
 }());
@@ -171,7 +207,13 @@ var Mouse;
     window.onmousedown = function (event) {
         mouseDown = true;
     };
+    window.ontouchstart = function (event) {
+        mouseDown = true;
+    };
     window.onmouseup = function (event) {
+        mouseDown = false;
+    };
+    window.ontouchend = function (event) {
         mouseDown = false;
     };
 })(Mouse || (Mouse = {}));
@@ -202,6 +244,7 @@ var Looper = (function () {
         this.renderable = renderable;
         this.ctx = ctx;
         this.unsimulatedTime = 0;
+        this.shouldStop = false;
         // Captures "this" correctly for requestAnimationFrame
         this.loop = function (timestamp) {
             var deltaTimestamp = timestamp - _this.previousTimestamp;
@@ -220,7 +263,9 @@ var Looper = (function () {
             if (updateCount > 0) {
                 _this.renderable.render(_this.ctx);
             }
-            window.requestAnimationFrame(_this.loop);
+            if (!_this.shouldStop) {
+                _this.frameId = window.requestAnimationFrame(_this.loop);
+            }
         };
         this.fixedTimestepMs = 1000 * this.fixedTimestep;
     }
@@ -232,34 +277,56 @@ var Looper = (function () {
         });
     };
     Looper.prototype.stop = function () {
-        window.cancelAnimationFrame(this.frameId);
+        this.shouldStop = true;
     };
     return Looper;
 }());
-function init() {
-    Mouse.init();
-    Keyboard.init();
-    ChunkManager.init();
-    var gameCanvas = document.getElementById("game");
-    var ctx = gameCanvas.getContext("2d");
-    window.onresize = function (event) {
-        CanvasUtilities.fitCanvasToWindow(gameCanvas);
-    };
-    CanvasUtilities.fitCanvasToWindow(gameCanvas);
-    ctx.font = "24px Arial";
-    ctx.fillText("Click to Start", 100, 100);
+var Main;
+(function (Main) {
+    var gameCanvas;
+    var ctx;
+    var looper;
     var player;
     var game;
-    var looper;
-    game = new Game(10, 100 * ChunkManager.TILE_SIZE);
-    player = new Player(game, new BoundingBox(3 * ChunkManager.TILE_SIZE, 0, ChunkManager.TILE_SIZE, ChunkManager.TILE_SIZE), new Vector(0, 0), 30 * ChunkManager.TILE_SIZE, 2);
-    game.player = player;
-    looper = new Looper(1 / 60, game, game, ctx);
-    gameCanvas.onclick = function (event) {
+    function restart() {
+        looper.stop();
+        loadGame();
         looper.start();
-    };
-}
-window.onload = function (event) { return init(); };
+    }
+    Main.restart = restart;
+    function loadGame() {
+        game = new Game(10, 100 * ChunkManager.tileSize);
+        player = new Player(game, new BoundingBox(3 * ChunkManager.tileSize, 0, ChunkManager.tileSize, ChunkManager.tileSize), new Vector(0, 0), 30 * ChunkManager.tileSize, 2);
+        game.player = player;
+        looper = new Looper(1 / 60, game, game, ctx);
+    }
+    Main.loadGame = loadGame;
+    function init() {
+        Mouse.init();
+        Keyboard.init();
+        ChunkManager.init();
+        gameCanvas = document.getElementById("game");
+        ctx = gameCanvas.getContext("2d");
+        var handleResize = function () {
+            CanvasUtilities.fitCanvasToWindow(gameCanvas);
+            ChunkManager.tileSize = window.innerHeight / ChunkManager.CHUNK_HEIGHT;
+        };
+        window.onresize = function (event) {
+            handleResize();
+        };
+        handleResize();
+        ctx.font;
+        loadGame();
+        var startButton = document.getElementById("start-button");
+        startButton.onclick = function (event) {
+            startButton.style.display = "none";
+            gameCanvas.style.display = "block";
+            looper.start();
+        };
+    }
+    Main.init = init;
+    window.onload = function (event) { return init(); };
+})(Main || (Main = {}));
 var Vector = (function () {
     function Vector(x, y) {
         this.x = x;
@@ -299,23 +366,27 @@ var Player = (function () {
         if (this.collidesWithMap(CollisionDirection.Y)) {
             if (this.velocity.y < 0) {
                 this.bb.y =
-                    Math.ceil(this.bb.y / ChunkManager.TILE_SIZE)
-                        * ChunkManager.TILE_SIZE;
+                    Math.ceil(this.bb.y / ChunkManager.tileSize)
+                        * ChunkManager.tileSize;
             }
             else if (this.velocity.y > 0) {
                 this.bb.y =
-                    Math.floor(this.bb.bottom() / ChunkManager.TILE_SIZE)
-                        * ChunkManager.TILE_SIZE - this.bb.height;
+                    Math.floor(this.bb.bottom() / ChunkManager.tileSize)
+                        * ChunkManager.tileSize - this.bb.height;
                 this.grounded = true;
                 this.jumpsLeft = this.maxJumps;
             }
             this.velocity.y = 0;
         }
         this.handleInput();
+        var currentTileInfo = this.game.tileInformationFromCoordinate(this.bb.x + this.bb.width / 2, this.bb.y + this.bb.height / 2);
+        if (this.bb.y > window.innerHeight ||
+            (currentTileInfo != null && currentTileInfo.isBlocked())) {
+            this.die();
+        }
     };
     Player.prototype.render = function (ctx) {
-        ctx.fillStyle = "red";
-        ctx.fillRect(this.bb.x, this.bb.y, this.bb.width, this.bb.height);
+        CanvasUtilities.fillStrokeRect(ctx, "#00C6FF", "#FFFFFF", this.bb.x, this.bb.y, this.bb.width, this.bb.height, 1);
     };
     Player.prototype.collidesWithMap = function (d) {
         var tileInfo;
@@ -356,9 +427,23 @@ var Player = (function () {
         this.velocity.y = -this.jumpPower;
         this.jumpsLeft -= 1;
     };
-    Player.collisionModifiers = [0.01, 0.5, 0.99];
+    Player.prototype.die = function () {
+        this.game.restart();
+    };
+    Player.collisionModifiers = [0, 0.5, 1];
     return Player;
 }());
+var SaveState;
+(function (SaveState) {
+    function setHighScore(score) {
+        window.localStorage.setItem("highScore", "" + score);
+    }
+    SaveState.setHighScore = setHighScore;
+    function getHighScore() {
+        return window.localStorage.getItem("highScore");
+    }
+    SaveState.getHighScore = getHighScore;
+})(SaveState || (SaveState = {}));
 var CanvasUtilities;
 (function (CanvasUtilities) {
     function fitCanvasToWindow(canvas) {
@@ -366,6 +451,18 @@ var CanvasUtilities;
         canvas.height = window.innerHeight;
     }
     CanvasUtilities.fitCanvasToWindow = fitCanvasToWindow;
+    function fillStrokeRect(ctx, fillStyle, strokeStyle, x, y, width, height, lineWidth) {
+        ctx.fillStyle = fillStyle;
+        ctx.fillRect(x, y, width, height);
+        ctx.strokeStyle = strokeStyle;
+        ctx.lineWidth = lineWidth;
+        ctx.strokeRect(x, y, width, height);
+    }
+    CanvasUtilities.fillStrokeRect = fillStrokeRect;
+    function clear(ctx) {
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    }
+    CanvasUtilities.clear = clear;
 })(CanvasUtilities || (CanvasUtilities = {}));
 var MathUtilities;
 (function (MathUtilities) {

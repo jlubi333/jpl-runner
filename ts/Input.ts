@@ -22,8 +22,14 @@ namespace Mouse {
     window.onmousedown = (event) => {
         mouseDown = true;
     }
+    window.ontouchstart = (event: UIEvent) => {
+        mouseDown = true;
+    }
 
     window.onmouseup = (event) => {
+        mouseDown = false;
+    }
+    window.ontouchend = (event: UIEvent) => {
         mouseDown = false;
     }
 }

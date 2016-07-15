@@ -19,12 +19,12 @@ class Player implements Updatable, Renderable {
         if (this.collidesWithMap(CollisionDirection.Y)) {
             if (this.velocity.y < 0) {
                 this.bb.y =
-                    Math.ceil(this.bb.y / ChunkManager.TILE_SIZE)
-                        * ChunkManager.TILE_SIZE;
+                    Math.ceil(this.bb.y / ChunkManager.tileSize)
+                        * ChunkManager.tileSize;
             } else if (this.velocity.y > 0) {
                 this.bb.y =
-                    Math.floor(this.bb.bottom() / ChunkManager.TILE_SIZE)
-                        * ChunkManager.TILE_SIZE - this.bb.height;
+                    Math.floor(this.bb.bottom() / ChunkManager.tileSize)
+                        * ChunkManager.tileSize - this.bb.height;
                 this.grounded = true;
                 this.jumpsLeft = this.maxJumps;
             }
@@ -32,17 +32,32 @@ class Player implements Updatable, Renderable {
         }
 
         this.handleInput();
+
+        let currentTileInfo = this.game.tileInformationFromCoordinate(
+            this.bb.x + this.bb.width / 2,
+            this.bb.y + this.bb.height / 2
+        );
+
+        if (this.bb.y > window.innerHeight ||
+            (currentTileInfo != null && currentTileInfo.isBlocked())) {
+            this.die();
+        }
     }
 
     public render(ctx: CanvasRenderingContext2D): void {
-        ctx.fillStyle = "red";
-        ctx.fillRect(this.bb.x,
-                     this.bb.y,
-                     this.bb.width,
-                     this.bb.height);
+        CanvasUtilities.fillStrokeRect(
+            ctx,
+            "#00C6FF",
+            "#FFFFFF",
+            this.bb.x,
+            this.bb.y,
+            this.bb.width,
+            this.bb.height,
+            1
+        );
     }
 
-    private static collisionModifiers = [0.01, 0.5, 0.99];
+    private static collisionModifiers = [0, 0.5, 1];
     public collidesWithMap(d: CollisionDirection): boolean {
         let tileInfo: TileInformation;
         let modifier: number;
@@ -90,5 +105,9 @@ class Player implements Updatable, Renderable {
     public jump(): void {
         this.velocity.y = -this.jumpPower;
         this.jumpsLeft -= 1;
+    }
+
+    public die(): void {
+        this.game.restart();
     }
 }

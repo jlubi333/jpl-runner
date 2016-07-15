@@ -3,6 +3,25 @@ namespace CanvasUtilities {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
     }
+
+    export function fillStrokeRect(ctx: CanvasRenderingContext2D,
+                                   fillStyle: string,
+                                   strokeStyle: string,
+                                   x: number,
+                                   y: number,
+                                   width: number,
+                                   height: number,
+                                   lineWidth: number): void {
+        ctx.fillStyle = fillStyle;
+        ctx.fillRect(x, y, width, height);
+        ctx.strokeStyle = strokeStyle;
+        ctx.lineWidth = lineWidth;
+        ctx.strokeRect(x, y, width, height);
+    }
+
+    export function clear(ctx: CanvasRenderingContext2D) {
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    }
 }
 
 namespace MathUtilities {

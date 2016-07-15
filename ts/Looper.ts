@@ -3,6 +3,7 @@ class Looper {
     private frameId: number;
     private previousTimestamp: number;
     private unsimulatedTime: number = 0;
+    private shouldStop = false;
 
     constructor(private fixedTimestep: number,
                 private updatable: Updatable,
@@ -32,7 +33,9 @@ class Looper {
             this.renderable.render(this.ctx);
         }
 
-        window.requestAnimationFrame(this.loop);
+        if (!this.shouldStop) {
+            this.frameId = window.requestAnimationFrame(this.loop);
+        }
     }
 
     public start(): void {
@@ -43,6 +46,6 @@ class Looper {
     }
 
     public stop(): void {
-        window.cancelAnimationFrame(this.frameId);
+        this.shouldStop = true;
     }
 }
