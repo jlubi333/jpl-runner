@@ -1,51 +1,3 @@
-var idArray1 = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-];
-var idArray2 = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-];
-var idArray3 = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-];
 var TileInformation = (function () {
     function TileInformation(id) {
         this.id = id;
@@ -101,14 +53,33 @@ var Chunk = (function () {
 }());
 var ChunkManager;
 (function (ChunkManager) {
-    ChunkManager.CHUNK_WIDTH = 20;
-    ChunkManager.CHUNK_HEIGHT = 14;
-    ChunkManager.tileSize = 32;
-    function init() {
-        ChunkManager.chunkLoaders = [];
-        ChunkManager.chunkLoaders.push(function () { return new Chunk(TileInformation.loadFromIdArray(idArray1)); });
-        ChunkManager.chunkLoaders.push(function () { return new Chunk(TileInformation.loadFromIdArray(idArray2)); });
-        ChunkManager.chunkLoaders.push(function () { return new Chunk(TileInformation.loadFromIdArray(idArray3)); });
+    function init(callback) {
+        var request = new XMLHttpRequest();
+        request.onload = function () {
+            var response = JSON.parse(this.responseText);
+            ChunkManager.chunkWidth = response["chunkWidth"];
+            ChunkManager.chunkHeight = response["chunkHeight"];
+            var idArrays = response["chunks"];
+            ChunkManager.chunkLoaders = [];
+            var _loop_1 = function(i) {
+                var idArray = idArrays[i];
+                if (idArray.length != ChunkManager.chunkHeight) {
+                    console.error("Chunk #" + i +
+                        " height does not match chunkHeight.");
+                }
+                if (idArray[0].length != ChunkManager.chunkWidth) {
+                    console.error("Chunk #" + i +
+                        " width does not match chunkWidth.");
+                }
+                ChunkManager.chunkLoaders.push(function () { return new Chunk(TileInformation.loadFromIdArray(idArray)); });
+            };
+            for (var i = 0; i < idArrays.length; i++) {
+                _loop_1(i);
+            }
+            callback();
+        };
+        request.open("GET", "/assets/chunks.json", true);
+        request.send();
     }
     ChunkManager.init = init;
     function generateRandomChunk() {
@@ -138,7 +109,7 @@ var Game = (function () {
             this.offset -= ChunkManager.tileSize;
             this.offsetTile += 1;
         }
-        if (this.offsetTile >= ChunkManager.CHUNK_WIDTH) {
+        if (this.offsetTile >= ChunkManager.chunkWidth) {
             this.offsetTile = 0;
             this.currentChunk = this.nextChunk;
             this.nextChunk = ChunkManager.generateRandomChunk();
@@ -147,12 +118,12 @@ var Game = (function () {
     };
     Game.prototype.render = function (ctx) {
         CanvasUtilities.clear(ctx);
-        this.currentChunk.render(ctx, this.offsetTile, ChunkManager.CHUNK_WIDTH, -this.offsetTile * ChunkManager.tileSize
+        this.currentChunk.render(ctx, this.offsetTile, ChunkManager.chunkWidth, -this.offsetTile * ChunkManager.tileSize
             - this.offset);
-        this.nextChunk.render(ctx, 0, this.offsetTile + 1, ChunkManager.CHUNK_WIDTH * ChunkManager.tileSize
+        this.nextChunk.render(ctx, 0, this.offsetTile + 1, ChunkManager.chunkWidth * ChunkManager.tileSize
             - this.offsetTile * ChunkManager.tileSize
             - this.offset);
-        CanvasUtilities.fillStrokeRect(ctx, "#000000", "#000000", ChunkManager.CHUNK_WIDTH * ChunkManager.tileSize, 0, window.innerWidth, window.innerHeight, 1);
+        CanvasUtilities.fillStrokeRect(ctx, "#000000", "#000000", ChunkManager.chunkWidth * ChunkManager.tileSize, 0, window.innerWidth, window.innerHeight, 1);
         this.player.render(ctx);
         ctx.font = "18px Inconsolata";
         ctx.fillStyle = "#FFFFFF";
@@ -164,15 +135,15 @@ var Game = (function () {
     Game.prototype.tileInformationFromCoordinate = function (x, y) {
         var row = Math.floor(y / ChunkManager.tileSize);
         var col = Math.floor(x / ChunkManager.tileSize);
-        if (row >= ChunkManager.CHUNK_HEIGHT || row < 0 ||
-            col >= ChunkManager.CHUNK_WIDTH || col < 0) {
+        if (row >= ChunkManager.chunkHeight || row < 0 ||
+            col >= ChunkManager.chunkWidth || col < 0) {
             return null;
         }
         else {
             col += this.offsetTile;
-            if (col >= ChunkManager.CHUNK_WIDTH) {
+            if (col >= ChunkManager.chunkWidth) {
                 return this.nextChunk
-                    .tileArray[row][col - ChunkManager.CHUNK_WIDTH];
+                    .tileArray[row][col - ChunkManager.chunkWidth];
             }
             else {
                 return this.currentChunk.tileArray[row][col];
@@ -187,6 +158,24 @@ var Game = (function () {
     };
     return Game;
 }());
+var GameManager;
+(function (GameManager) {
+    var TASK_COUNT = 1;
+    var tasksComplete = 0;
+    function done(callback) {
+        tasksComplete += 1;
+        if (tasksComplete == TASK_COUNT) {
+            callback();
+        }
+    }
+    function init(callback) {
+        var doneCallback = function () { return done(callback); };
+        Mouse.init();
+        Keyboard.init();
+        ChunkManager.init(doneCallback);
+    }
+    GameManager.init = init;
+})(GameManager || (GameManager = {}));
 var Mouse;
 (function (Mouse) {
     var mouseDown;
@@ -302,14 +291,11 @@ var Main;
     }
     Main.loadGame = loadGame;
     function init() {
-        Mouse.init();
-        Keyboard.init();
-        ChunkManager.init();
         gameCanvas = document.getElementById("game");
         ctx = gameCanvas.getContext("2d");
         var handleResize = function () {
             CanvasUtilities.fitCanvasToWindow(gameCanvas);
-            ChunkManager.tileSize = window.innerHeight / ChunkManager.CHUNK_HEIGHT;
+            ChunkManager.tileSize = window.innerHeight / ChunkManager.chunkHeight;
         };
         window.onresize = function (event) {
             handleResize();
@@ -325,7 +311,7 @@ var Main;
         };
     }
     Main.init = init;
-    window.onload = function (event) { return init(); };
+    window.onload = function (event) { return GameManager.init(function () { return init(); }); };
 })(Main || (Main = {}));
 var Vector = (function () {
     function Vector(x, y) {

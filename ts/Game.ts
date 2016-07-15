@@ -21,7 +21,7 @@ class Game implements Updatable, Renderable {
             this.offset -= ChunkManager.tileSize;
             this.offsetTile += 1;
         }
-        if (this.offsetTile >= ChunkManager.CHUNK_WIDTH) {
+        if (this.offsetTile >= ChunkManager.chunkWidth) {
             this.offsetTile = 0;
             this.currentChunk = this.nextChunk;
             this.nextChunk = ChunkManager.generateRandomChunk();
@@ -35,13 +35,13 @@ class Game implements Updatable, Renderable {
 
         this.currentChunk.render(ctx,
                                  this.offsetTile,
-                                 ChunkManager.CHUNK_WIDTH,
+                                 ChunkManager.chunkWidth,
                                  -this.offsetTile * ChunkManager.tileSize
                                      - this.offset);
         this.nextChunk.render(ctx,
                               0,
                               this.offsetTile + 1,
-                              ChunkManager.CHUNK_WIDTH * ChunkManager.tileSize
+                              ChunkManager.chunkWidth * ChunkManager.tileSize
                                   - this.offsetTile * ChunkManager.tileSize
                                   - this.offset);
 
@@ -49,7 +49,7 @@ class Game implements Updatable, Renderable {
             ctx,
             "#000000",
             "#000000",
-            ChunkManager.CHUNK_WIDTH * ChunkManager.tileSize,
+            ChunkManager.chunkWidth * ChunkManager.tileSize,
             0,
             window.innerWidth,
             window.innerHeight,
@@ -75,14 +75,14 @@ class Game implements Updatable, Renderable {
         let row = Math.floor(y / ChunkManager.tileSize);
         let col = Math.floor(x / ChunkManager.tileSize);
 
-        if (row >= ChunkManager.CHUNK_HEIGHT || row < 0 ||
-            col >= ChunkManager.CHUNK_WIDTH || col < 0) {
+        if (row >= ChunkManager.chunkHeight || row < 0 ||
+            col >= ChunkManager.chunkWidth || col < 0) {
             return null;
         } else {
             col += this.offsetTile;
-            if (col >= ChunkManager.CHUNK_WIDTH) {
+            if (col >= ChunkManager.chunkWidth) {
                 return this.nextChunk
-                           .tileArray[row][col - ChunkManager.CHUNK_WIDTH];
+                           .tileArray[row][col - ChunkManager.chunkWidth];
             }
             else {
                 return this.currentChunk.tileArray[row][col];

@@ -27,16 +27,12 @@ namespace Main {
     }
 
     export function init(): void {
-        Mouse.init();
-        Keyboard.init();
-        ChunkManager.init();
-
         gameCanvas = <HTMLCanvasElement> document.getElementById("game");
         ctx = gameCanvas.getContext("2d");
 
         let handleResize = () => {
             CanvasUtilities.fitCanvasToWindow(gameCanvas);
-            ChunkManager.tileSize = window.innerHeight / ChunkManager.CHUNK_HEIGHT;
+            ChunkManager.tileSize = window.innerHeight / ChunkManager.chunkHeight;
         }
         window.onresize = (event) => {
             handleResize();
@@ -54,5 +50,5 @@ namespace Main {
         }
     }
 
-    window.onload = (event) => init();
+    window.onload = (event) => GameManager.init(() => init());
 }

@@ -1,54 +1,3 @@
-let idArray1 = [
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,1,1,1,1,1,0,0,0,0,0,1,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-];
-
-let idArray2 = [
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-];
-
-let idArray3 = [
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0],
-    [0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0],
-    [0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0],
-    [0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0],
-    [0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0],
-    [0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0],
-    [0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0],
-    [0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0],
-];
-
 class TileInformation {
     private static tileFillStyleMap: {[id: number]: string} = {
         0: "#000000",
@@ -120,24 +69,41 @@ class Chunk {
 }
 
 namespace ChunkManager {
-    export const CHUNK_WIDTH = 20;
-    export const CHUNK_HEIGHT = 14;
-
-    export let tileSize = 32;
+    export let chunkWidth: number;
+    export let chunkHeight: number;
+    export let tileSize: number;
 
     export let chunkLoaders: (() => Chunk)[];
 
-    export function init() {
-        ChunkManager.chunkLoaders = [];
-        ChunkManager.chunkLoaders.push(() => new Chunk(
-            TileInformation.loadFromIdArray(idArray1)
-        ));
-        ChunkManager.chunkLoaders.push(() => new Chunk(
-            TileInformation.loadFromIdArray(idArray2)
-        ));
-        ChunkManager.chunkLoaders.push(() => new Chunk(
-            TileInformation.loadFromIdArray(idArray3)
-        ));
+    export function init(callback: () => void): void {
+        const request = new XMLHttpRequest();
+        request.onload = function() {
+            const response = JSON.parse(this.responseText);
+
+            chunkWidth = response["chunkWidth"];
+            chunkHeight = response["chunkHeight"];
+            const idArrays = response["chunks"];
+
+            chunkLoaders = [];
+            for (let i = 0; i < idArrays.length; i++) {
+                let idArray = idArrays[i];
+                if (idArray.length != chunkHeight) {
+                    console.error("Chunk #" + i +
+                                  " height does not match chunkHeight.");
+                }
+                if (idArray[0].length != chunkWidth) {
+                    console.error("Chunk #" + i +
+                                  " width does not match chunkWidth.");
+                }
+                ChunkManager.chunkLoaders.push(() => new Chunk(
+                    TileInformation.loadFromIdArray(idArray)
+                ));
+            }
+
+            callback();
+        };
+        request.open("GET", "/assets/chunks.json", true);
+        request.send();
     }
 
     export function generateRandomChunk(): Chunk {
