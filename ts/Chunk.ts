@@ -65,22 +65,13 @@ class TileInformation {
     }
 }
 
-class Chunk implements Updatable, Renderable {
+class Chunk {
     constructor(public tileArray: TileInformation[][]) {}
 
     public update(dt: number): void {
-        for (let row = 0; row < this.tileArray.length; row++) {
-            for (let col = 0; col < this.tileArray[row].length; col++) {
-            }
-        }
     }
 
-    public render(ctx: CanvasRenderingContext2D): void {
-        this.partialRender(ctx, 0, this.tileArray[0].length, 0);
-    }
-
-    // Renders from leftBound (inclusive) to rightBound (exclusive) with offset
-    public partialRender(ctx: CanvasRenderingContext2D,
+    public render(ctx: CanvasRenderingContext2D,
                          leftBound: number,
                          rightBound: number,
                          offset: number): void {
@@ -102,22 +93,22 @@ namespace ChunkManager {
     export const CHUNK_HEIGHT = 8;
     export const TILE_SIZE = 32;
 
-    export let chunks: Chunk[];
+    export let chunkLoaders: (() => Chunk)[];
 
     export function init() {
-        ChunkManager.chunks = [];
-        ChunkManager.chunks.push(new Chunk(
+        ChunkManager.chunkLoaders = [];
+        ChunkManager.chunkLoaders.push(() => new Chunk(
             TileInformation.loadFromIdArray(idArray1)
         ));
-        ChunkManager.chunks.push(new Chunk(
+        ChunkManager.chunkLoaders.push(() => new Chunk(
             TileInformation.loadFromIdArray(idArray2)
         ));
-        ChunkManager.chunks.push(new Chunk(
+        ChunkManager.chunkLoaders.push(() => new Chunk(
             TileInformation.loadFromIdArray(idArray3)
         ));
     }
 
-    export function randomChunk(): Chunk {
-        return MathUtilities.randSelection(ChunkManager.chunks);
+    export function generateRandomChunk(): Chunk {
+        return MathUtilities.randSelection(ChunkManager.chunkLoaders)();
     }
 }

@@ -1,0 +1,3 @@
+enum CollisionDirection {
+    X, Y
+}

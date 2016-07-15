@@ -63,16 +63,8 @@ var Chunk = (function () {
         this.tileArray = tileArray;
     }
     Chunk.prototype.update = function (dt) {
-        for (var row = 0; row < this.tileArray.length; row++) {
-            for (var col = 0; col < this.tileArray[row].length; col++) {
-            }
-        }
     };
-    Chunk.prototype.render = function (ctx) {
-        this.partialRender(ctx, 0, this.tileArray[0].length, 0);
-    };
-    // Renders from leftBound (inclusive) to rightBound (exclusive) with offset
-    Chunk.prototype.partialRender = function (ctx, leftBound, rightBound, offset) {
+    Chunk.prototype.render = function (ctx, leftBound, rightBound, offset) {
         for (var row = 0; row < this.tileArray.length; row++) {
             for (var col = leftBound; col < rightBound; col++) {
                 var tileInfo = this.tileArray[row][col];
@@ -89,24 +81,30 @@ var ChunkManager;
     ChunkManager.CHUNK_HEIGHT = 8;
     ChunkManager.TILE_SIZE = 32;
     function init() {
-        ChunkManager.chunks = [];
-        ChunkManager.chunks.push(new Chunk(TileInformation.loadFromIdArray(idArray1)));
-        ChunkManager.chunks.push(new Chunk(TileInformation.loadFromIdArray(idArray2)));
-        ChunkManager.chunks.push(new Chunk(TileInformation.loadFromIdArray(idArray3)));
+        ChunkManager.chunkLoaders = [];
+        ChunkManager.chunkLoaders.push(function () { return new Chunk(TileInformation.loadFromIdArray(idArray1)); });
+        ChunkManager.chunkLoaders.push(function () { return new Chunk(TileInformation.loadFromIdArray(idArray2)); });
+        ChunkManager.chunkLoaders.push(function () { return new Chunk(TileInformation.loadFromIdArray(idArray3)); });
     }
     ChunkManager.init = init;
-    function randomChunk() {
-        return MathUtilities.randSelection(ChunkManager.chunks);
+    function generateRandomChunk() {
+        return MathUtilities.randSelection(ChunkManager.chunkLoaders)();
     }
-    ChunkManager.randomChunk = randomChunk;
+    ChunkManager.generateRandomChunk = generateRandomChunk;
 })(ChunkManager || (ChunkManager = {}));
+var CollisionDirection;
+(function (CollisionDirection) {
+    CollisionDirection[CollisionDirection["X"] = 0] = "X";
+    CollisionDirection[CollisionDirection["Y"] = 1] = "Y";
+})(CollisionDirection || (CollisionDirection = {}));
 var Game = (function () {
-    function Game(tileSpeed) {
+    function Game(tileSpeed, gravity) {
         this.tileSpeed = tileSpeed;
+        this.gravity = gravity;
         this.offset = 0;
         this.offsetTile = 0;
-        this.currentChunk = ChunkManager.randomChunk();
-        this.nextChunk = ChunkManager.randomChunk();
+        this.currentChunk = ChunkManager.generateRandomChunk();
+        this.nextChunk = ChunkManager.generateRandomChunk();
     }
     Game.prototype.update = function (dt) {
         this.offset += this.tileSpeed * ChunkManager.TILE_SIZE * dt;
@@ -117,309 +115,85 @@ var Game = (function () {
         if (this.offsetTile >= ChunkManager.CHUNK_WIDTH) {
             this.offsetTile = 0;
             this.currentChunk = this.nextChunk;
-            this.nextChunk = ChunkManager.randomChunk();
+            this.nextChunk = ChunkManager.generateRandomChunk();
         }
+        this.player.update(dt);
     };
     Game.prototype.render = function (ctx) {
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-        this.currentChunk
-            .partialRender(ctx, this.offsetTile, ChunkManager.CHUNK_WIDTH, -this.offsetTile * ChunkManager.TILE_SIZE - this.offset);
-        this.nextChunk
-            .partialRender(ctx, 0, this.offsetTile + 1, ChunkManager.CHUNK_WIDTH * ChunkManager.TILE_SIZE - this.offsetTile * ChunkManager.TILE_SIZE - this.offset);
+        this.currentChunk.render(ctx, this.offsetTile, ChunkManager.CHUNK_WIDTH, -this.offsetTile * ChunkManager.TILE_SIZE
+            - this.offset);
+        this.nextChunk.render(ctx, 0, this.offsetTile + 1, ChunkManager.CHUNK_WIDTH * ChunkManager.TILE_SIZE
+            - this.offsetTile * ChunkManager.TILE_SIZE
+            - this.offset);
         // TODO remove world bound indicator
-        ctx.fillStyle = "red";
+        ctx.fillStyle = "rgba(255, 0, 0, 0.9)";
         ctx.fillRect(ChunkManager.CHUNK_WIDTH * ChunkManager.TILE_SIZE, 0, 10000, 10000);
+        this.player.render(ctx);
+    };
+    Game.prototype.tileInformationFromCoordinate = function (x, y) {
+        var row = Math.floor(y / ChunkManager.TILE_SIZE);
+        var col = Math.floor(x / ChunkManager.TILE_SIZE);
+        if (row >= ChunkManager.CHUNK_HEIGHT || row < 0 ||
+            col >= ChunkManager.CHUNK_WIDTH || col < 0) {
+            return null;
+        }
+        else {
+            col += this.offsetTile;
+            if (col >= ChunkManager.CHUNK_WIDTH) {
+                return this.nextChunk
+                    .tileArray[row][col - ChunkManager.CHUNK_WIDTH];
+            }
+            else {
+                return this.currentChunk.tileArray[row][col];
+            }
+        }
     };
     return Game;
 }());
 var Mouse;
 (function (Mouse) {
-    function init(pos) {
-        if (pos === void 0) { pos = new Vector(window.innerWidth / 2, window.innerHeight / 2); }
-        Mouse.pos = pos;
+    var mouseDown;
+    function init(initialPos) {
+        if (initialPos === void 0) { initialPos = new Vector(window.innerWidth / 2, window.innerHeight / 2); }
+        Mouse.pos = initialPos;
+        mouseDown = false;
     }
     Mouse.init = init;
+    function isMouseDown() {
+        return mouseDown;
+    }
+    Mouse.isMouseDown = isMouseDown;
+    window.onmousemove = function (event) {
+        Mouse.pos.x = event.pageX;
+        Mouse.pos.y = event.pageY;
+    };
+    window.onmousedown = function (event) {
+        mouseDown = true;
+    };
+    window.onmouseup = function (event) {
+        mouseDown = false;
+    };
 })(Mouse || (Mouse = {}));
-window.onmousemove = function (event) {
-    Mouse.pos.x = event.pageX;
-    Mouse.pos.y = event.pageY;
-};
 var Keyboard;
 (function (Keyboard) {
-    Keyboard.KEYBOARD_MAP = [
-        "",
-        "",
-        "",
-        "CANCEL",
-        "",
-        "",
-        "HELP",
-        "",
-        "BACK_SPACE",
-        "TAB",
-        "",
-        "",
-        "CLEAR",
-        "ENTER",
-        "ENTER_SPECIAL",
-        "",
-        "SHIFT",
-        "CONTROL",
-        "ALT",
-        "PAUSE",
-        "CAPS_LOCK",
-        "KANA",
-        "EISU",
-        "JUNJA",
-        "FINAL",
-        "HANJA",
-        "",
-        "ESCAPE",
-        "CONVERT",
-        "NONCONVERT",
-        "ACCEPT",
-        "MODECHANGE",
-        "SPACE",
-        "PAGE_UP",
-        "PAGE_DOWN",
-        "END",
-        "HOME",
-        "LEFT",
-        "UP",
-        "RIGHT",
-        "DOWN",
-        "SELECT",
-        "PRINT",
-        "EXECUTE",
-        "PRINTSCREEN",
-        "INSERT",
-        "DELETE",
-        "",
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "COLON",
-        "SEMICOLON",
-        "LESS_THAN",
-        "EQUALS",
-        "GREATER_THAN",
-        "QUESTION_MARK",
-        "AT",
-        "A",
-        "B",
-        "C",
-        "D",
-        "E",
-        "F",
-        "G",
-        "H",
-        "I",
-        "J",
-        "K",
-        "L",
-        "M",
-        "N",
-        "O",
-        "P",
-        "Q",
-        "R",
-        "S",
-        "T",
-        "U",
-        "V",
-        "W",
-        "X",
-        "Y",
-        "Z",
-        "OS_KEY",
-        "",
-        "CONTEXT_MENU",
-        "",
-        "SLEEP",
-        "NUMPAD0",
-        "NUMPAD1",
-        "NUMPAD2",
-        "NUMPAD3",
-        "NUMPAD4",
-        "NUMPAD5",
-        "NUMPAD6",
-        "NUMPAD7",
-        "NUMPAD8",
-        "NUMPAD9",
-        "MULTIPLY",
-        "ADD",
-        "SEPARATOR",
-        "SUBTRACT",
-        "DECIMAL",
-        "DIVIDE",
-        "F1",
-        "F2",
-        "F3",
-        "F4",
-        "F5",
-        "F6",
-        "F7",
-        "F8",
-        "F9",
-        "F10",
-        "F11",
-        "F12",
-        "F13",
-        "F14",
-        "F15",
-        "F16",
-        "F17",
-        "F18",
-        "F19",
-        "F20",
-        "F21",
-        "F22",
-        "F23",
-        "F24",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "NUM_LOCK",
-        "SCROLL_LOCK",
-        "WIN_OEM_FJ_JISHO",
-        "WIN_OEM_FJ_MASSHOU",
-        "WIN_OEM_FJ_TOUROKU",
-        "WIN_OEM_FJ_LOYA",
-        "WIN_OEM_FJ_ROYA",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "CIRCUMFLEX",
-        "EXCLAMATION",
-        "DOUBLE_QUOTE",
-        "HASH",
-        "DOLLAR",
-        "PERCENT",
-        "AMPERSAND",
-        "UNDERSCORE",
-        "OPEN_PAREN",
-        "CLOSE_PAREN",
-        "ASTERISK",
-        "PLUS",
-        "PIPE",
-        "HYPHEN_MINUS",
-        "OPEN_CURLY_BRACKET",
-        "CLOSE_CURLY_BRACKET",
-        "TILDE",
-        "",
-        "",
-        "",
-        "",
-        "VOLUME_MUTE",
-        "VOLUME_DOWN",
-        "VOLUME_UP",
-        "",
-        "",
-        "SEMICOLON",
-        "EQUALS",
-        "COMMA",
-        "MINUS",
-        "PERIOD",
-        "SLASH",
-        "BACK_QUOTE",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "OPEN_BRACKET",
-        "BACK_SLASH",
-        "CLOSE_BRACKET",
-        "QUOTE",
-        "",
-        "META",
-        "ALTGR",
-        "",
-        "WIN_ICO_HELP",
-        "WIN_ICO_00",
-        "",
-        "WIN_ICO_CLEAR",
-        "",
-        "",
-        "WIN_OEM_RESET",
-        "WIN_OEM_JUMP",
-        "WIN_OEM_PA1",
-        "WIN_OEM_PA2",
-        "WIN_OEM_PA3",
-        "WIN_OEM_WSCTRL",
-        "WIN_OEM_CUSEL",
-        "WIN_OEM_ATTN",
-        "WIN_OEM_FINISH",
-        "WIN_OEM_COPY",
-        "WIN_OEM_AUTO",
-        "WIN_OEM_ENLW",
-        "WIN_OEM_BACKTAB",
-        "ATTN",
-        "CRSEL",
-        "EXSEL",
-        "EREOF",
-        "PLAY",
-        "ZOOM",
-        "",
-        "PA1",
-        "WIN_OEM_CLEAR",
-        "" // [255]
-    ];
+    var keysDown;
     function init() {
-        this.keysDown = {};
+        keysDown = {};
     }
     Keyboard.init = init;
     function isKeyDown(keyCode) {
         // Cannot just return Keyboard.keys[keyCode] because it may be null
-        return Keyboard.keysDown[keyCode] == true;
+        return keysDown[keyCode] == true;
     }
     Keyboard.isKeyDown = isKeyDown;
+    window.onkeydown = function (event) {
+        keysDown[event.keyCode] = true;
+    };
+    window.onkeyup = function (event) {
+        keysDown[event.keyCode] = false;
+    };
 })(Keyboard || (Keyboard = {}));
-window.onkeydown = function (event) {
-    Keyboard.keysDown[event.keyCode] = true;
-};
-window.onkeyup = function (event) {
-    Keyboard.keysDown[event.keyCode] = false;
-};
 var Looper = (function () {
     function Looper(fixedTimestep, updatable, renderable, ctx) {
         var _this = this;
@@ -474,8 +248,13 @@ function init() {
     CanvasUtilities.fitCanvasToWindow(gameCanvas);
     ctx.font = "24px Arial";
     ctx.fillText("Click to Start", 100, 100);
-    var game = new Game(5);
-    var looper = new Looper(1 / 60, game, game, ctx);
+    var player;
+    var game;
+    var looper;
+    game = new Game(10, 100 * ChunkManager.TILE_SIZE);
+    player = new Player(game, new BoundingBox(3 * ChunkManager.TILE_SIZE, 0, ChunkManager.TILE_SIZE, ChunkManager.TILE_SIZE), new Vector(0, 0), 30 * ChunkManager.TILE_SIZE, 2);
+    game.player = player;
+    looper = new Looper(1 / 60, game, game, ctx);
     gameCanvas.onclick = function (event) {
         looper.start();
     };
@@ -503,16 +282,81 @@ var BoundingBox = (function () {
     };
     return BoundingBox;
 }());
-var GRAVITY = 1000;
 var Player = (function () {
-    function Player(position, velocity) {
-        this.position = position;
+    function Player(game, bb, velocity, jumpPower, maxJumps) {
+        this.game = game;
+        this.bb = bb;
         this.velocity = velocity;
+        this.jumpPower = jumpPower;
+        this.maxJumps = maxJumps;
+        this.canJumpAgain = true;
+        this.jumpsLeft = maxJumps;
     }
     Player.prototype.update = function (dt) {
+        this.velocity.y += this.game.gravity * dt;
+        this.bb.y += this.velocity.y * dt;
+        this.grounded = false;
+        if (this.collidesWithMap(CollisionDirection.Y)) {
+            if (this.velocity.y < 0) {
+                this.bb.y =
+                    Math.ceil(this.bb.y / ChunkManager.TILE_SIZE)
+                        * ChunkManager.TILE_SIZE;
+            }
+            else if (this.velocity.y > 0) {
+                this.bb.y =
+                    Math.floor(this.bb.bottom() / ChunkManager.TILE_SIZE)
+                        * ChunkManager.TILE_SIZE - this.bb.height;
+                this.grounded = true;
+                this.jumpsLeft = this.maxJumps;
+            }
+            this.velocity.y = 0;
+        }
+        this.handleInput();
     };
     Player.prototype.render = function (ctx) {
+        ctx.fillStyle = "red";
+        ctx.fillRect(this.bb.x, this.bb.y, this.bb.width, this.bb.height);
     };
+    Player.prototype.collidesWithMap = function (d) {
+        var tileInfo;
+        var modifier;
+        for (var i = 0; i < 3; i++) {
+            modifier = Player.collisionModifiers[i];
+            if (d == CollisionDirection.X) {
+                tileInfo = this.game.tileInformationFromCoordinate(this.bb.x, this.bb.y + this.bb.height * modifier);
+            }
+            else if (d == CollisionDirection.Y) {
+                if (this.velocity.y < 0) {
+                    tileInfo = this.game.tileInformationFromCoordinate(this.bb.x + this.bb.width * modifier, this.bb.y);
+                }
+                else if (this.velocity.y > 0) {
+                    tileInfo = this.game.tileInformationFromCoordinate(this.bb.x + this.bb.width * modifier, this.bb.bottom());
+                }
+            }
+            if (tileInfo != null && tileInfo.isBlocked()) {
+                return true;
+            }
+        }
+        return false;
+    };
+    Player.prototype.handleInput = function () {
+        var jumpPressed = Keyboard.isKeyDown(32) || Mouse.isMouseDown();
+        if (!jumpPressed) {
+            this.canJumpAgain = true;
+        }
+        if (this.canJump() && jumpPressed) {
+            this.jump();
+            this.canJumpAgain = false;
+        }
+    };
+    Player.prototype.canJump = function () {
+        return this.grounded || (this.jumpsLeft > 0 && this.canJumpAgain);
+    };
+    Player.prototype.jump = function () {
+        this.velocity.y = -this.jumpPower;
+        this.jumpsLeft -= 1;
+    };
+    Player.collisionModifiers = [0.01, 0.5, 0.99];
     return Player;
 }());
 var CanvasUtilities;

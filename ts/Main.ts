@@ -14,8 +14,22 @@ function init(): void {
     ctx.font = "24px Arial";
     ctx.fillText("Click to Start", 100, 100);
 
-    let game = new Game(5);
-    let looper = new Looper(1/60, game, game, ctx);
+    let player: Player;
+    let game: Game;
+    let looper: Looper;
+
+    game = new Game(10,
+                    100 * ChunkManager.TILE_SIZE);
+    player = new Player(game,
+                        new BoundingBox(3 * ChunkManager.TILE_SIZE,
+                                        0,
+                                        ChunkManager.TILE_SIZE,
+                                        ChunkManager.TILE_SIZE),
+                        new Vector(0, 0),
+                        30 * ChunkManager.TILE_SIZE,
+                        2);
+    game.player = player;
+    looper = new Looper(1/60, game, game, ctx);
 
     gameCanvas.onclick = (event) => {
         looper.start();
