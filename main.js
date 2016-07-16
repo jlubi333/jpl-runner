@@ -179,7 +179,9 @@ var GameManager;
     }
     GameManager.init = init;
     function getAssetFile(assetType) {
-        return "../assets/" + assetType + ".json";
+        // The generated JavaScript file will be in the root directory, so this
+        // is relative to that.
+        return "assets/" + assetType + ".json";
     }
     GameManager.getAssetFile = getAssetFile;
 })(GameManager || (GameManager = {}));
