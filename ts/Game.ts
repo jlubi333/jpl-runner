@@ -45,21 +45,10 @@ class Game implements Updatable, Renderable {
                                      - this.offset);
         this.nextChunk.render(ctx,
                               0,
-                              this.offsetTile + 1,
+                              ChunkManager.chunkWidth,
                               ChunkManager.chunkWidth * ChunkManager.tileSize
                                   - this.offsetTile * ChunkManager.tileSize
                                   - this.offset);
-
-        CanvasUtilities.fillStrokeRect(
-            ctx,
-            "#000000",
-            "#000000",
-            ChunkManager.chunkWidth * ChunkManager.tileSize,
-            0,
-            window.innerWidth,
-            window.innerHeight,
-            1
-        );
 
         this.player.render(ctx);
 

@@ -125,10 +125,9 @@ var Game = (function () {
         CanvasUtilities.clear(ctx);
         this.currentChunk.render(ctx, this.offsetTile, ChunkManager.chunkWidth, -this.offsetTile * ChunkManager.tileSize
             - this.offset);
-        this.nextChunk.render(ctx, 0, this.offsetTile + 1, ChunkManager.chunkWidth * ChunkManager.tileSize
+        this.nextChunk.render(ctx, 0, ChunkManager.chunkWidth, ChunkManager.chunkWidth * ChunkManager.tileSize
             - this.offsetTile * ChunkManager.tileSize
             - this.offset);
-        CanvasUtilities.fillStrokeRect(ctx, "#000000", "#000000", ChunkManager.chunkWidth * ChunkManager.tileSize, 0, window.innerWidth, window.innerHeight, 1);
         this.player.render(ctx);
         ctx.font = "18px Inconsolata";
         ctx.fillStyle = "#FFFFFF";
