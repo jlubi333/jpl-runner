@@ -75,9 +75,12 @@ namespace ChunkManager {
 
     export let chunkLoaders: (() => Chunk)[];
 
+    const ASSET_TYPE = "chunks";
+
     export function init(callback: () => void): void {
-        const request = new XMLHttpRequest();
-        request.onload = function() {
+        const chunkRequest = new XMLHttpRequest();
+
+        chunkRequest.onload = function() {
             const response = JSON.parse(this.responseText);
 
             chunkWidth = response["chunkWidth"];
@@ -102,8 +105,8 @@ namespace ChunkManager {
 
             callback();
         };
-        request.open("GET", "/assets/chunks.json", true);
-        request.send();
+        chunkRequest.open("GET", GameManager.getAssetFile(ASSET_TYPE), true);
+        chunkRequest.send();
     }
 
     export function generateRandomChunk(): Chunk {

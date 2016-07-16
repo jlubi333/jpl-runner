@@ -103,11 +103,13 @@ class Player implements Updatable, Renderable {
     }
 
     public jump(): void {
+        SoundManager.jump.play();
         this.velocity.y = -this.jumpPower;
         this.jumpsLeft -= 1;
     }
 
     public die(): void {
+        SoundManager.death.play();
         this.game.restart();
     }
 }

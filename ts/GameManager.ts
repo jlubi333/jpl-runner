@@ -1,5 +1,5 @@
 namespace GameManager {
-    const TASK_COUNT = 1;
+    const TASK_COUNT = 2;
     let tasksComplete = 0;
 
     function done(callback: () => void) {
@@ -14,5 +14,10 @@ namespace GameManager {
         Mouse.init();
         Keyboard.init();
         ChunkManager.init(doneCallback);
+        SoundManager.init(doneCallback);
+    }
+
+    export function getAssetFile(assetType: string) {
+        return "/assets/" + assetType + ".json";
     }
 }

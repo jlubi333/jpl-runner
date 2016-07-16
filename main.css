@@ -17,15 +17,29 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    color: #FFFFFF;
+    font-family: "Inconsolata", monospace;
+    text-align: center;
+}
+
+a {
+    color: #00C6FF;
+}
+
+#start-panel {
+    display: none;
+}
+
+#high-score {
+    text-decoration: underline;
 }
 
 #start-button {
     cursor: pointer;
     display: inline-block;
     background-color: #00C6FF;
-    color: #FFFFFF;
     font-size: 3em;
-    font-family: "Inconsolata", monospace;
+    margin: 20px;
     padding: 20px;
     border: 1px solid #FFFFFF;
 }

@@ -42,9 +42,21 @@ namespace Main {
         ctx.font
         loadGame();
 
-        let startButton = <HTMLElement> document.getElementById("start-button");
+        let loadingPanel = document.getElementById("loading-panel");
+        let startPanel = document.getElementById("start-panel");
+        let startButton = document.getElementById("start-button");
+
+        loadingPanel.style.display = "none";
+        startPanel.style.display = "block";
+
+        if (SaveState.getHighScore() != null) {
+            let highScoreOutput = document.getElementById("high-score");
+            highScoreOutput.innerHTML = "High Score: " +
+                                         Math.round(SaveState.getHighScore());
+        }
+
         startButton.onclick = (event) => {
-            startButton.style.display = "none";
+            startPanel.style.display = "none";
             gameCanvas.style.display = "block";
             looper.start();
         }

@@ -53,9 +53,10 @@ var Chunk = (function () {
 }());
 var ChunkManager;
 (function (ChunkManager) {
+    var ASSET_TYPE = "chunks";
     function init(callback) {
-        var request = new XMLHttpRequest();
-        request.onload = function () {
+        var chunkRequest = new XMLHttpRequest();
+        chunkRequest.onload = function () {
             var response = JSON.parse(this.responseText);
             ChunkManager.chunkWidth = response["chunkWidth"];
             ChunkManager.chunkHeight = response["chunkHeight"];
@@ -78,8 +79,8 @@ var ChunkManager;
             }
             callback();
         };
-        request.open("GET", "/assets/chunks.json", true);
-        request.send();
+        chunkRequest.open("GET", GameManager.getAssetFile(ASSET_TYPE), true);
+        chunkRequest.send();
     }
     ChunkManager.init = init;
     function generateRandomChunk() {
@@ -101,6 +102,7 @@ var Game = (function () {
         this.score = 0;
         this.currentChunk = ChunkManager.generateRandomChunk();
         this.nextChunk = ChunkManager.generateRandomChunk();
+        SoundManager.background.play();
     }
     Game.prototype.update = function (dt) {
         this.score += 100 * dt;
@@ -160,7 +162,7 @@ var Game = (function () {
 }());
 var GameManager;
 (function (GameManager) {
-    var TASK_COUNT = 1;
+    var TASK_COUNT = 2;
     var tasksComplete = 0;
     function done(callback) {
         tasksComplete += 1;
@@ -173,8 +175,13 @@ var GameManager;
         Mouse.init();
         Keyboard.init();
         ChunkManager.init(doneCallback);
+        SoundManager.init(doneCallback);
     }
     GameManager.init = init;
+    function getAssetFile(assetType) {
+        return "/assets/" + assetType + ".json";
+    }
+    GameManager.getAssetFile = getAssetFile;
 })(GameManager || (GameManager = {}));
 var Mouse;
 (function (Mouse) {
@@ -303,9 +310,18 @@ var Main;
         handleResize();
         ctx.font;
         loadGame();
+        var loadingPanel = document.getElementById("loading-panel");
+        var startPanel = document.getElementById("start-panel");
         var startButton = document.getElementById("start-button");
+        loadingPanel.style.display = "none";
+        startPanel.style.display = "block";
+        if (SaveState.getHighScore() != null) {
+            var highScoreOutput = document.getElementById("high-score");
+            highScoreOutput.innerHTML = "High Score: " +
+                Math.round(SaveState.getHighScore());
+        }
         startButton.onclick = function (event) {
-            startButton.style.display = "none";
+            startPanel.style.display = "none";
             gameCanvas.style.display = "block";
             looper.start();
         };
@@ -410,10 +426,12 @@ var Player = (function () {
         return this.grounded || (this.jumpsLeft > 0 && this.canJumpAgain);
     };
     Player.prototype.jump = function () {
+        SoundManager.jump.play();
         this.velocity.y = -this.jumpPower;
         this.jumpsLeft -= 1;
     };
     Player.prototype.die = function () {
+        SoundManager.death.play();
         this.game.restart();
     };
     Player.collisionModifiers = [0, 0.5, 1];
@@ -430,6 +448,30 @@ var SaveState;
     }
     SaveState.getHighScore = getHighScore;
 })(SaveState || (SaveState = {}));
+var SoundManager;
+(function (SoundManager) {
+    var ASSET_TYPE = "sounds";
+    function loadAudio(response, name) {
+        var audioData = response[name];
+        var audio = new Audio(audioData["path"]);
+        audio.loop = audioData["loop"];
+        audio.volume = audioData["volume"];
+        return audio;
+    }
+    function init(callback) {
+        var soundRequest = new XMLHttpRequest();
+        soundRequest.onload = function () {
+            var response = JSON.parse(this.responseText);
+            SoundManager.background = loadAudio(response, "background");
+            SoundManager.jump = loadAudio(response, "jump");
+            SoundManager.death = loadAudio(response, "death");
+            callback();
+        };
+        soundRequest.open("GET", GameManager.getAssetFile(ASSET_TYPE), true);
+        soundRequest.send();
+    }
+    SoundManager.init = init;
+})(SoundManager || (SoundManager = {}));
 var CanvasUtilities;
 (function (CanvasUtilities) {
     function fitCanvasToWindow(canvas) {

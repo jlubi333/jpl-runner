@@ -11,6 +11,7 @@ class Game implements Updatable, Renderable {
                 public gravity: number) {
         this.currentChunk = ChunkManager.generateRandomChunk();
         this.nextChunk = ChunkManager.generateRandomChunk();
+        SoundManager.background.play();
     }
 
     public update(dt: number): void {
