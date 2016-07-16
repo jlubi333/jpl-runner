@@ -3,18 +3,22 @@ class Game implements Updatable, Renderable {
     private offsetTile: number = 0;
     private currentChunk: Chunk;
     private nextChunk: Chunk;
+    private tileSpeed: number;
     private score: number = 0;
 
     public player: Player;
 
-    constructor(public tileSpeed: number,
+    constructor(private initialTileSpeed: number,
+                public speedMultiplier: number,
                 public gravity: number) {
+        this.tileSpeed = this.initialTileSpeed;
         this.currentChunk = ChunkManager.generateRandomChunk();
         this.nextChunk = ChunkManager.generateRandomChunk();
         SoundManager.background.play();
     }
 
     public update(dt: number): void {
+        this.tileSpeed += this.speedMultiplier * dt;
         this.score += 100 * dt;
 
         this.offset += this.tileSpeed * ChunkManager.tileSize * dt;

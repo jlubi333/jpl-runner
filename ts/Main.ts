@@ -13,10 +13,11 @@ namespace Main {
 
     export function loadGame() {
         game = new Game(10,
+                        0.5,
                         100 * ChunkManager.tileSize);
         player = new Player(game,
                             new BoundingBox(3 * ChunkManager.tileSize,
-                                            0,
+                                            -ChunkManager.tileSize,
                                             ChunkManager.tileSize,
                                             ChunkManager.tileSize),
                             new Vector(0, 0),

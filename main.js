@@ -94,17 +94,20 @@ var CollisionDirection;
     CollisionDirection[CollisionDirection["Y"] = 1] = "Y";
 })(CollisionDirection || (CollisionDirection = {}));
 var Game = (function () {
-    function Game(tileSpeed, gravity) {
-        this.tileSpeed = tileSpeed;
+    function Game(initialTileSpeed, speedMultiplier, gravity) {
+        this.initialTileSpeed = initialTileSpeed;
+        this.speedMultiplier = speedMultiplier;
         this.gravity = gravity;
         this.offset = 0;
         this.offsetTile = 0;
         this.score = 0;
+        this.tileSpeed = this.initialTileSpeed;
         this.currentChunk = ChunkManager.generateRandomChunk();
         this.nextChunk = ChunkManager.generateRandomChunk();
         SoundManager.background.play();
     }
     Game.prototype.update = function (dt) {
+        this.tileSpeed += this.speedMultiplier * dt;
         this.score += 100 * dt;
         this.offset += this.tileSpeed * ChunkManager.tileSize * dt;
         if (this.offset >= ChunkManager.tileSize) {
@@ -293,8 +296,8 @@ var Main;
     }
     Main.restart = restart;
     function loadGame() {
-        game = new Game(10, 100 * ChunkManager.tileSize);
-        player = new Player(game, new BoundingBox(3 * ChunkManager.tileSize, 0, ChunkManager.tileSize, ChunkManager.tileSize), new Vector(0, 0), 30 * ChunkManager.tileSize, 2);
+        game = new Game(10, 0.5, 100 * ChunkManager.tileSize);
+        player = new Player(game, new BoundingBox(3 * ChunkManager.tileSize, -ChunkManager.tileSize, ChunkManager.tileSize, ChunkManager.tileSize), new Vector(0, 0), 30 * ChunkManager.tileSize, 2);
         game.player = player;
         looper = new Looper(1 / 60, game, game, ctx);
     }
@@ -441,12 +444,13 @@ var Player = (function () {
 }());
 var SaveState;
 (function (SaveState) {
+    var VERSION = "1";
     function setHighScore(score) {
-        window.localStorage.setItem("highScore", "" + score);
+        window.localStorage.setItem("highScore" + VERSION, "" + score);
     }
     SaveState.setHighScore = setHighScore;
     function getHighScore() {
-        return window.localStorage.getItem("highScore");
+        return window.localStorage.getItem("highScore" + VERSION);
     }
     SaveState.getHighScore = getHighScore;
 })(SaveState || (SaveState = {}));
