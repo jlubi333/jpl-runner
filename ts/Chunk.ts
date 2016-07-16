@@ -47,9 +47,9 @@ class Chunk {
     }
 
     public render(ctx: CanvasRenderingContext2D,
-                         leftBound: number,
-                         rightBound: number,
-                         offset: number): void {
+                  leftBound: number,
+                  rightBound: number,
+                  offset: number): void {
         for (let row = 0; row < this.tileArray.length; row++) {
             for (let col = leftBound; col < rightBound; col++) {
                 let tileInfo = this.tileArray[row][col];
