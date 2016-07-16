@@ -179,7 +179,7 @@ var GameManager;
     }
     GameManager.init = init;
     function getAssetFile(assetType) {
-        return "/assets/" + assetType + ".json";
+        return "../assets/" + assetType + ".json";
     }
     GameManager.getAssetFile = getAssetFile;
 })(GameManager || (GameManager = {}));

@@ -18,6 +18,6 @@ namespace GameManager {
     }
 
     export function getAssetFile(assetType: string) {
-        return "/assets/" + assetType + ".json";
+        return "../assets/" + assetType + ".json";
     }
 }
