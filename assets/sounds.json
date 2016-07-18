@@ -2,7 +2,7 @@
 	"background": {
 		"path": "assets/sounds/chibi-ninja.mp3",
         "loop": true,
-        "volume": 1
+        "volume": 0.5
 	},
 	"jump": {
 		"path": "assets/sounds/jump.wav",
@@ -12,6 +12,6 @@
 	"death": {
 		"path": "assets/sounds/death.wav",
         "loop": false,
-        "volume": 0.4
+        "volume": 0.2
 	}
 }
