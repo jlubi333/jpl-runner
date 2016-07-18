@@ -53,7 +53,7 @@ class Player implements Updatable, Renderable {
         );
     }
 
-    private static collisionModifiers = [0, 0.5, 1];
+    private static collisionModifiers = [0.01, 0.5, 0.99];
     public collidesWithMap(d: CollisionDirection): boolean {
         let tileInfo: TileInformation;
         let modifier: number;
@@ -61,8 +61,9 @@ class Player implements Updatable, Renderable {
         for (let i = 0; i < 3; i++) {
             modifier = Player.collisionModifiers[i];
             if (d == CollisionDirection.X) {
+                // Can only be moving right
                 tileInfo = this.game.tileInformationFromCoordinate(
-                    this.bb.x, this.bb.y + this.bb.height * modifier
+                    this.bb.right(), this.bb.y + this.bb.height * modifier
                 );
             } else if (d == CollisionDirection.Y) {
                 if (this.velocity.y < 0) {
