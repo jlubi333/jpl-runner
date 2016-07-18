@@ -126,7 +126,7 @@ var CollisionDirection;
     CollisionDirection[CollisionDirection["Y"] = 1] = "Y";
 })(CollisionDirection || (CollisionDirection = {}));
 var Game = (function () {
-    function Game(initialTileSpeed, speedMultiplier, gravity) {
+    function Game(initialTileSpeed, speedMultiplier, gravity, chunkRenderDistance) {
         this.initialTileSpeed = initialTileSpeed;
         this.speedMultiplier = speedMultiplier;
         this.gravity = gravity;
@@ -134,8 +134,10 @@ var Game = (function () {
         this.offsetTile = 0;
         this.score = 0;
         this.tileSpeed = this.initialTileSpeed;
-        this.currentChunk = ChunkManager.generateRandomChunk();
-        this.nextChunk = ChunkManager.generateRandomChunk();
+        this.chunkQueue = [];
+        for (var i = 0; i < chunkRenderDistance; i++) {
+            this.chunkQueue.push(ChunkManager.generateRandomChunk());
+        }
         SoundManager.background.play();
     }
     Game.prototype.update = function (dt) {
@@ -148,17 +150,17 @@ var Game = (function () {
         }
         if (this.offsetTile >= ChunkManager.chunkWidth) {
             this.offsetTile = 0;
-            this.currentChunk = this.nextChunk;
-            this.nextChunk = ChunkManager.generateRandomChunk();
+            this.shiftChunks();
         }
         this.player.update(dt);
     };
     Game.prototype.render = function (ctx) {
         CanvasUtilities.clear(ctx);
-        this.currentChunk.render(ctx, this.offsetTile, ChunkManager.chunkWidth, -this.offsetTile - this.offset);
-        this.nextChunk.render(ctx, 0, ChunkManager.chunkWidth, ChunkManager.chunkWidth
-            - this.offsetTile
-            - this.offset);
+        for (var i = 0; i < this.chunkQueue.length; i++) {
+            this.chunkQueue[i].render(ctx, 0, ChunkManager.chunkWidth, i * ChunkManager.chunkWidth
+                - this.offsetTile
+                - this.offset);
+        }
         this.player.render(ctx);
         ScoreUtilities.displayScore(this.score);
         if (SaveState.getHighScore() != null) {
@@ -175,11 +177,11 @@ var Game = (function () {
         else {
             col += this.offsetTile;
             if (col >= ChunkManager.chunkWidth) {
-                return this.nextChunk
+                return this.getNextChunk()
                     .tileArray[row][col - ChunkManager.chunkWidth];
             }
             else {
-                return this.currentChunk.tileArray[row][col];
+                return this.getHeadChunk().tileArray[row][col];
             }
         }
     };
@@ -188,6 +190,19 @@ var Game = (function () {
             SaveState.setHighScore(this.score);
         }
         Main.restart();
+    };
+    Game.prototype.getHeadChunk = function () {
+        return this.chunkQueue[0];
+    };
+    Game.prototype.getNextChunk = function () {
+        return this.chunkQueue[1];
+    };
+    Game.prototype.shiftChunks = function () {
+        for (var i = 0; i < this.chunkQueue.length - 1; i++) {
+            this.chunkQueue[i] = this.chunkQueue[i + 1];
+        }
+        this.chunkQueue[this.chunkQueue.length - 1] =
+            ChunkManager.generateRandomChunk();
     };
     return Game;
 }());
@@ -319,7 +334,7 @@ var Main;
     }
     Main.restart = restart;
     function loadGame() {
-        game = new Game(10, 0.5, 100);
+        game = new Game(10, 0.5, 100, 4);
         player = new Player(game, new BoundingBox(3, -1, 1, 1), new Vector(0, 0), 30, 2);
         game.player = player;
         looper = new Looper(1 / 60, game, game, ctx);

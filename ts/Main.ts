@@ -14,7 +14,8 @@ namespace Main {
     export function loadGame() {
         game = new Game(10,
                         0.5,
-                        100);
+                        100,
+                        4);
         player = new Player(game,
                             new BoundingBox(3, -1, 1,1),
                             new Vector(0, 0),

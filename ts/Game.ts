@@ -1,8 +1,7 @@
 class Game implements Updatable, Renderable {
     private offset: number = 0;
     private offsetTile: number = 0;
-    private currentChunk: Chunk;
-    private nextChunk: Chunk;
+    private chunkQueue: Chunk[];
     private tileSpeed: number;
     private score: number = 0;
 
@@ -10,10 +9,13 @@ class Game implements Updatable, Renderable {
 
     constructor(private initialTileSpeed: number,
                 public speedMultiplier: number,
-                public gravity: number) {
+                public gravity: number,
+                chunkRenderDistance: number) {
         this.tileSpeed = this.initialTileSpeed;
-        this.currentChunk = ChunkManager.generateRandomChunk();
-        this.nextChunk = ChunkManager.generateRandomChunk();
+        this.chunkQueue = [];
+        for (let i = 0; i < chunkRenderDistance; i++) {
+            this.chunkQueue.push(ChunkManager.generateRandomChunk());
+        }
         SoundManager.background.play();
     }
 
@@ -28,8 +30,7 @@ class Game implements Updatable, Renderable {
         }
         if (this.offsetTile >= ChunkManager.chunkWidth) {
             this.offsetTile = 0;
-            this.currentChunk = this.nextChunk;
-            this.nextChunk = ChunkManager.generateRandomChunk();
+            this.shiftChunks();
         }
 
         this.player.update(dt);
@@ -38,16 +39,14 @@ class Game implements Updatable, Renderable {
     public render(ctx: CanvasRenderingContext2D): void {
         CanvasUtilities.clear(ctx);
 
-        this.currentChunk.render(ctx,
-                                 this.offsetTile,
-                                 ChunkManager.chunkWidth,
-                                 -this.offsetTile - this.offset);
-        this.nextChunk.render(ctx,
-                              0,
-                              ChunkManager.chunkWidth,
-                              ChunkManager.chunkWidth
-                                  - this.offsetTile
-                                  - this.offset);
+        for (let i = 0; i < this.chunkQueue.length; i++) {
+            this.chunkQueue[i].render(ctx,
+                                     0,
+                                     ChunkManager.chunkWidth,
+                                     i * ChunkManager.chunkWidth
+                                         - this.offsetTile
+                                         - this.offset);
+        }
 
         this.player.render(ctx);
 
@@ -69,11 +68,11 @@ class Game implements Updatable, Renderable {
         } else {
             col += this.offsetTile;
             if (col >= ChunkManager.chunkWidth) {
-                return this.nextChunk
+                return this.getNextChunk()
                            .tileArray[row][col - ChunkManager.chunkWidth];
             }
             else {
-                return this.currentChunk.tileArray[row][col];
+                return this.getHeadChunk().tileArray[row][col];
             }
         }
     }
@@ -83,5 +82,21 @@ class Game implements Updatable, Renderable {
             SaveState.setHighScore(this.score);
         }
         Main.restart();
+    }
+
+    private getHeadChunk(): Chunk {
+        return this.chunkQueue[0];
+    }
+
+    private getNextChunk(): Chunk {
+        return this.chunkQueue[1];
+    }
+
+    private shiftChunks(): void {
+        for (let i = 0; i < this.chunkQueue.length - 1; i++) {
+            this.chunkQueue[i] = this.chunkQueue[i + 1];
+        }
+        this.chunkQueue[this.chunkQueue.length - 1] =
+            ChunkManager.generateRandomChunk()
     }
 }
