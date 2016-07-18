@@ -1,7 +1,18 @@
 namespace CanvasUtilities {
+    export function hiResCanvasResize(canvas: HTMLCanvasElement,
+                                      width: number,
+                                      height: number) {
+        canvas.width = width * window.devicePixelRatio;
+        canvas.height = height * window.devicePixelRatio;
+        canvas.style.width = width + "px";
+        canvas.style.height = height + "px";
+        canvas.getContext("2d").scale(
+            window.devicePixelRatio, window.devicePixelRatio
+        );
+    }
+
     export function fitCanvasToWindow(canvas: HTMLCanvasElement): void {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        hiResCanvasResize(canvas, window.innerWidth, window.innerHeight);
     }
 
     export function scaledRect(ctx: CanvasRenderingContext2D,
@@ -28,15 +39,3 @@ namespace CanvasUtilities {
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     }
 }
-
-namespace MathUtilities {
-    // Returns a random integer in the range [min, max).
-    export function randInt(min: number, max: number) {
-        return Math.floor(Math.random() * (max - min)) + min;
-    }
-
-    export function randSelection<T>(array: T[]): T {
-        return array[randInt(0, array.length)];
-    }
-}
-

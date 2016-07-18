@@ -1,3 +1,35 @@
+var CanvasUtilities;
+(function (CanvasUtilities) {
+    function hiResCanvasResize(canvas, width, height) {
+        canvas.width = width * window.devicePixelRatio;
+        canvas.height = height * window.devicePixelRatio;
+        canvas.style.width = width + "px";
+        canvas.style.height = height + "px";
+        canvas.getContext("2d").scale(window.devicePixelRatio, window.devicePixelRatio);
+    }
+    CanvasUtilities.hiResCanvasResize = hiResCanvasResize;
+    function fitCanvasToWindow(canvas) {
+        hiResCanvasResize(canvas, window.innerWidth, window.innerHeight);
+    }
+    CanvasUtilities.fitCanvasToWindow = fitCanvasToWindow;
+    function scaledRect(ctx, fillStyle, strokeStyle, x, y, width, height, lineWidth) {
+        var scx = Scale.convert(x);
+        var scy = Scale.convert(y);
+        var scw = Scale.convert(width);
+        var sch = Scale.convert(height);
+        var sclw = Scale.convert(lineWidth);
+        ctx.fillStyle = fillStyle;
+        ctx.fillRect(scx, scy, scw, sch);
+        ctx.strokeStyle = strokeStyle;
+        ctx.lineWidth = sclw;
+        ctx.strokeRect(scx, scy, scw, sch);
+    }
+    CanvasUtilities.scaledRect = scaledRect;
+    function clear(ctx) {
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    }
+    CanvasUtilities.clear = clear;
+})(CanvasUtilities || (CanvasUtilities = {}));
 var TileInformation = (function () {
     function TileInformation(id) {
         this.id = id;
@@ -332,6 +364,18 @@ var Main;
     Main.init = init;
     window.onload = function (event) { return GameManager.init(function () { return init(); }); };
 })(Main || (Main = {}));
+var MathUtilities;
+(function (MathUtilities) {
+    // Returns a random integer in the range [min, max).
+    function randInt(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+    MathUtilities.randInt = randInt;
+    function randSelection(array) {
+        return array[randInt(0, array.length)];
+    }
+    MathUtilities.randSelection = randSelection;
+})(MathUtilities || (MathUtilities = {}));
 var Vector = (function () {
     function Vector(x, y) {
         this.x = x;
@@ -479,40 +523,3 @@ var SoundManager;
     }
     SoundManager.init = init;
 })(SoundManager || (SoundManager = {}));
-var CanvasUtilities;
-(function (CanvasUtilities) {
-    function fitCanvasToWindow(canvas) {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-    CanvasUtilities.fitCanvasToWindow = fitCanvasToWindow;
-    function scaledRect(ctx, fillStyle, strokeStyle, x, y, width, height, lineWidth) {
-        var scx = Scale.convert(x);
-        var scy = Scale.convert(y);
-        var scw = Scale.convert(width);
-        var sch = Scale.convert(height);
-        var sclw = Scale.convert(lineWidth);
-        ctx.fillStyle = fillStyle;
-        ctx.fillRect(scx, scy, scw, sch);
-        ctx.strokeStyle = strokeStyle;
-        ctx.lineWidth = sclw;
-        ctx.strokeRect(scx, scy, scw, sch);
-    }
-    CanvasUtilities.scaledRect = scaledRect;
-    function clear(ctx) {
-        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    }
-    CanvasUtilities.clear = clear;
-})(CanvasUtilities || (CanvasUtilities = {}));
-var MathUtilities;
-(function (MathUtilities) {
-    // Returns a random integer in the range [min, max).
-    function randInt(min, max) {
-        return Math.floor(Math.random() * (max - min)) + min;
-    }
-    MathUtilities.randInt = randInt;
-    function randSelection(array) {
-        return array[randInt(0, array.length)];
-    }
-    MathUtilities.randSelection = randSelection;
-})(MathUtilities || (MathUtilities = {}));
