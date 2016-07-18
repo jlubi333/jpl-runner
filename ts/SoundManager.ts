@@ -3,6 +3,7 @@ namespace SoundManager {
     export let jump: HTMLAudioElement;
     export let death: HTMLAudioElement;
 
+    let muteButton: HTMLElement;
     let muted: boolean = false;
     let volumeBackups: {[id: string]: number} = {};
 
@@ -30,6 +31,12 @@ namespace SoundManager {
         };
         soundRequest.open("GET", GameManager.getAssetFile(ASSET_TYPE), true);
         soundRequest.send();
+
+        muteButton = document.getElementById("mute-button");
+
+        muteButton.onclick = (event) => {
+            toggleMute();
+        }
     }
 
     function mute(): void {
@@ -49,8 +56,10 @@ namespace SoundManager {
     export function toggleMute(): void {
         if (muted) {
             unmute();
+            muteButton.innerHTML = "Mute";
         } else {
             mute();
+            muteButton.innerHTML = "Unmute";
         }
     }
 }

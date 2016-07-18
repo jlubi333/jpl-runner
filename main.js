@@ -339,7 +339,6 @@ var Main;
         Mouse.handle(gameCanvas);
         ctx.font;
         loadGame();
-        var muteButton = document.getElementById("mute-button");
         var loadingPanel = document.getElementById("loading-panel");
         var startPanel = document.getElementById("start-panel");
         var startButton = document.getElementById("start-button");
@@ -349,10 +348,6 @@ var Main;
         if (SaveState.getHighScore() != null) {
             ScoreUtilities.displayHighScore();
         }
-        muteButton.onclick = function (event) {
-            event.preventDefault();
-            SoundManager.toggleMute();
-        };
         startButton.onclick = function (event) {
             startPanel.style.display = "none";
             gameInfo.style.display = "block";
@@ -526,6 +521,7 @@ var ScoreUtilities;
 })(ScoreUtilities || (ScoreUtilities = {}));
 var SoundManager;
 (function (SoundManager) {
+    var muteButton;
     var muted = false;
     var volumeBackups = {};
     var ASSET_TYPE = "sounds";
@@ -548,6 +544,10 @@ var SoundManager;
         };
         soundRequest.open("GET", GameManager.getAssetFile(ASSET_TYPE), true);
         soundRequest.send();
+        muteButton = document.getElementById("mute-button");
+        muteButton.onclick = function (event) {
+            toggleMute();
+        };
     }
     SoundManager.init = init;
     function mute() {
@@ -565,9 +565,11 @@ var SoundManager;
     function toggleMute() {
         if (muted) {
             unmute();
+            muteButton.innerHTML = "Mute";
         }
         else {
             mute();
+            muteButton.innerHTML = "Unmute";
         }
     }
     SoundManager.toggleMute = toggleMute;

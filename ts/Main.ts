@@ -42,7 +42,6 @@ namespace Main {
         ctx.font
         loadGame();
 
-        let muteButton = document.getElementById("mute-button");
         let loadingPanel = document.getElementById("loading-panel");
         let startPanel = document.getElementById("start-panel");
         let startButton = document.getElementById("start-button");
@@ -53,11 +52,6 @@ namespace Main {
 
         if (SaveState.getHighScore() != null) {
             ScoreUtilities.displayHighScore();
-        }
-
-        muteButton.onclick = (event) => {
-            event.preventDefault();
-            SoundManager.toggleMute();
         }
 
         startButton.onclick = (event) => {
