@@ -3,7 +3,7 @@
     padding: 0;
 }
 
-html, body {
+html, body, #content {
     height: 100%;
 }
 
@@ -13,17 +13,46 @@ html {
 
 body {
     background-color: #000000;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     color: #FFFFFF;
     font-family: "Inconsolata", monospace;
-    text-align: center;
+    font-size: 16px;
 }
 
 a {
     color: #00C6FF;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+#menu-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    padding: 20px;
+}
+
+#game-info {
+    display: none;
+}
+
+#mute-button {
+    cursor: pointer;
+}
+
+#content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 #start-panel {
@@ -34,14 +63,14 @@ a {
 		margin: 10px;
 	}
 
+    #start-panel .high-score {
+        text-decoration: underline;
+    }
+
 .line {
 	width: 500px;
 	height: 1px;
 	background-color: #555555;
-}
-
-#high-score {
-    text-decoration: underline;
 }
 
 #start-button {

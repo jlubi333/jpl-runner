@@ -3,44 +3,40 @@ namespace Mouse {
 
     let mouseDown: boolean;
 
-    export function init(initialPos: Vector =
-                             new Vector(window.innerWidth / 2,
-                                        window.innerHeight / 2)) {
+    export function handle(parentElement: HTMLElement,
+                           initialPos: Vector =
+                               new Vector(window.innerWidth / 2,
+                                          window.innerHeight / 2)): void {
         pos = initialPos;
         mouseDown = false;
+
+        parentElement.onmousemove = (event) => {
+            pos.x = event.pageX;
+            pos.y = event.pageY;
+        };
+
+        parentElement.onmousedown = (event) => {
+            mouseDown = true;
+        };
+        parentElement.ontouchstart = (event: UIEvent) => {
+            mouseDown = true;
+        };
+
+        parentElement.onmouseup = (event) => {
+            mouseDown = false;
+        };
+        parentElement.ontouchend = (event: UIEvent) => {
+            mouseDown = false;
+        };
     }
 
-    export function isMouseDown() {
+    export function isMouseDown(): boolean {
         return mouseDown;
-    }
-
-    window.onmousemove = (event) => {
-        pos.x = event.pageX;
-        pos.y = event.pageY;
-    };
-
-    window.onmousedown = (event) => {
-        mouseDown = true;
-    }
-    window.ontouchstart = (event: UIEvent) => {
-        mouseDown = true;
-    }
-
-    window.onmouseup = (event) => {
-        mouseDown = false;
-    }
-    window.ontouchend = (event: UIEvent) => {
-        mouseDown = false;
     }
 }
 
-
 namespace Keyboard {
-    let keysDown: {[key: number]: boolean};
-
-    export function init() {
-        keysDown = {};
-    }
+    let keysDown: {[key: number]: boolean} = {};
 
     export function isKeyDown(keyCode: number): boolean {
         // Cannot just return Keyboard.keys[keyCode] because it may be null

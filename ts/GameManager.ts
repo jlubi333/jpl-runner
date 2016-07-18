@@ -11,8 +11,7 @@ namespace GameManager {
 
     export function init(callback: () => void): void {
         let doneCallback = () => done(callback)
-        Mouse.init();
-        Keyboard.init();
+        ScoreUtilities.init();
         ChunkManager.init(doneCallback);
         SoundManager.init(doneCallback);
     }

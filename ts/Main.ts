@@ -37,24 +37,32 @@ namespace Main {
         };
         handleResize();
 
+        Mouse.handle(gameCanvas);
+
         ctx.font
         loadGame();
 
+        let muteButton = document.getElementById("mute-button");
         let loadingPanel = document.getElementById("loading-panel");
         let startPanel = document.getElementById("start-panel");
         let startButton = document.getElementById("start-button");
+        let gameInfo = document.getElementById("game-info");
 
         loadingPanel.style.display = "none";
         startPanel.style.display = "block";
 
         if (SaveState.getHighScore() != null) {
-            let highScoreOutput = document.getElementById("high-score");
-            highScoreOutput.innerHTML = "High Score: " +
-                                         Math.round(SaveState.getHighScore());
+            ScoreUtilities.displayHighScore();
+        }
+
+        muteButton.onclick = (event) => {
+            event.preventDefault();
+            SoundManager.toggleMute();
         }
 
         startButton.onclick = (event) => {
             startPanel.style.display = "none";
+            gameInfo.style.display = "block";
             gameCanvas.style.display = "block";
             looper.start();
         }

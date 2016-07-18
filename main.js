@@ -160,11 +160,9 @@ var Game = (function () {
             - this.offsetTile
             - this.offset);
         this.player.render(ctx);
-        ctx.font = "18px Inconsolata";
-        ctx.fillStyle = "#FFFFFF";
-        ctx.fillText("     Score: " + Math.round(this.score), window.innerWidth - 200, 38);
+        ScoreUtilities.displayScore(this.score);
         if (SaveState.getHighScore() != null) {
-            ctx.fillText("High Score: " + Math.round(SaveState.getHighScore()), window.innerWidth - 200, 76);
+            ScoreUtilities.displayHighScore();
         }
     };
     Game.prototype.tileInformationFromCoordinate = function (x, y) {
@@ -205,8 +203,7 @@ var GameManager;
     }
     function init(callback) {
         var doneCallback = function () { return done(callback); };
-        Mouse.init();
-        Keyboard.init();
+        ScoreUtilities.init();
         ChunkManager.init(doneCallback);
         SoundManager.init(doneCallback);
     }
@@ -221,40 +218,36 @@ var GameManager;
 var Mouse;
 (function (Mouse) {
     var mouseDown;
-    function init(initialPos) {
+    function handle(parentElement, initialPos) {
         if (initialPos === void 0) { initialPos = new Vector(window.innerWidth / 2, window.innerHeight / 2); }
         Mouse.pos = initialPos;
         mouseDown = false;
+        parentElement.onmousemove = function (event) {
+            Mouse.pos.x = event.pageX;
+            Mouse.pos.y = event.pageY;
+        };
+        parentElement.onmousedown = function (event) {
+            mouseDown = true;
+        };
+        parentElement.ontouchstart = function (event) {
+            mouseDown = true;
+        };
+        parentElement.onmouseup = function (event) {
+            mouseDown = false;
+        };
+        parentElement.ontouchend = function (event) {
+            mouseDown = false;
+        };
     }
-    Mouse.init = init;
+    Mouse.handle = handle;
     function isMouseDown() {
         return mouseDown;
     }
     Mouse.isMouseDown = isMouseDown;
-    window.onmousemove = function (event) {
-        Mouse.pos.x = event.pageX;
-        Mouse.pos.y = event.pageY;
-    };
-    window.onmousedown = function (event) {
-        mouseDown = true;
-    };
-    window.ontouchstart = function (event) {
-        mouseDown = true;
-    };
-    window.onmouseup = function (event) {
-        mouseDown = false;
-    };
-    window.ontouchend = function (event) {
-        mouseDown = false;
-    };
 })(Mouse || (Mouse = {}));
 var Keyboard;
 (function (Keyboard) {
-    var keysDown;
-    function init() {
-        keysDown = {};
-    }
-    Keyboard.init = init;
+    var keysDown = {};
     function isKeyDown(keyCode) {
         // Cannot just return Keyboard.keys[keyCode] because it may be null
         return keysDown[keyCode] == true;
@@ -343,20 +336,26 @@ var Main;
             handleResize();
         };
         handleResize();
+        Mouse.handle(gameCanvas);
         ctx.font;
         loadGame();
+        var muteButton = document.getElementById("mute-button");
         var loadingPanel = document.getElementById("loading-panel");
         var startPanel = document.getElementById("start-panel");
         var startButton = document.getElementById("start-button");
+        var gameInfo = document.getElementById("game-info");
         loadingPanel.style.display = "none";
         startPanel.style.display = "block";
         if (SaveState.getHighScore() != null) {
-            var highScoreOutput = document.getElementById("high-score");
-            highScoreOutput.innerHTML = "High Score: " +
-                Math.round(SaveState.getHighScore());
+            ScoreUtilities.displayHighScore();
         }
+        muteButton.onclick = function (event) {
+            event.preventDefault();
+            SoundManager.toggleMute();
+        };
         startButton.onclick = function (event) {
             startPanel.style.display = "none";
+            gameInfo.style.display = "block";
             gameCanvas.style.display = "block";
             looper.start();
         };
@@ -499,14 +498,42 @@ var Scale;
     }
     Scale.convert = convert;
 })(Scale || (Scale = {}));
+var ScoreUtilities;
+(function (ScoreUtilities) {
+    var scoreOutputs;
+    var highScoreOutputs;
+    function init() {
+        scoreOutputs = document.getElementsByClassName("score");
+        highScoreOutputs = document.getElementsByClassName("high-score");
+    }
+    ScoreUtilities.init = init;
+    function displayScore(score) {
+        var scoreString = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Score: " +
+            Math.round(score);
+        for (var i = 0; i < scoreOutputs.length; i++) {
+            scoreOutputs[i].innerHTML = scoreString;
+        }
+    }
+    ScoreUtilities.displayScore = displayScore;
+    function displayHighScore() {
+        var highScoreString = "High Score: " + Math.round(SaveState.getHighScore());
+        for (var i = 0; i < highScoreOutputs.length; i++) {
+            highScoreOutputs[i].innerHTML = highScoreString;
+        }
+    }
+    ScoreUtilities.displayHighScore = displayHighScore;
+})(ScoreUtilities || (ScoreUtilities = {}));
 var SoundManager;
 (function (SoundManager) {
+    var muted = false;
+    var volumeBackups = {};
     var ASSET_TYPE = "sounds";
     function loadAudio(response, name) {
         var audioData = response[name];
         var audio = new Audio(audioData["path"]);
         audio.loop = audioData["loop"];
         audio.volume = audioData["volume"];
+        volumeBackups[name] = audio.volume;
         return audio;
     }
     function init(callback) {
@@ -522,4 +549,25 @@ var SoundManager;
         soundRequest.send();
     }
     SoundManager.init = init;
+    function mute() {
+        SoundManager.background.volume = 0;
+        SoundManager.jump.volume = 0;
+        SoundManager.death.volume = 0;
+        muted = true;
+    }
+    function unmute() {
+        SoundManager.background.volume = volumeBackups["background"];
+        SoundManager.jump.volume = volumeBackups["jump"];
+        SoundManager.death.volume = volumeBackups["death"];
+        muted = false;
+    }
+    function toggleMute() {
+        if (muted) {
+            unmute();
+        }
+        else {
+            mute();
+        }
+    }
+    SoundManager.toggleMute = toggleMute;
 })(SoundManager || (SoundManager = {}));

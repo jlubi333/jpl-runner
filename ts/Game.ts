@@ -51,15 +51,10 @@ class Game implements Updatable, Renderable {
 
         this.player.render(ctx);
 
-        ctx.font = "18px Inconsolata";
-        ctx.fillStyle = "#FFFFFF";
-        ctx.fillText("     Score: " + Math.round(this.score),
-                     window.innerWidth - 200,
-                     38);
+
+        ScoreUtilities.displayScore(this.score);
         if (SaveState.getHighScore() != null) {
-            ctx.fillText("High Score: " + Math.round(SaveState.getHighScore()),
-                         window.innerWidth - 200,
-                         76);
+            ScoreUtilities.displayHighScore();
         }
     }
 

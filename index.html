@@ -13,17 +13,28 @@
         <script src="main.js"></script>
     </head>
     <body>
-        <div id="loading-panel">
-            Loading...
+        <div id="menu-bar">
+            <div class="left">
+                <div id="mute-button">Mute</div>
+            </div>
+            <div id="game-info" class="right">
+                <div class="score"></div>
+                <div class="high-score"></div>
+            </div>
         </div>
-        <div id="start-panel">
-            <div id="high-score"></div>
-            <div><i>&lt;Spacebar&gt;</i> or <i>tap</i> to jump / double jump.</div>
-            <div class="line"></div>
-            <div id="start-button">Start</div>
-            <div class="line"></div>
-            <div>Music: <i>Chibi Ninja</i> by <a href="http://ericskiff.com/music/">Eric Skiff</a>.</div>
+        <div id="content">
+            <div id="loading-panel">
+                Loading...
+            </div>
+            <div id="start-panel">
+                <div class="high-score"></div>
+                <div><i>&lt;Spacebar&gt;</i> or <i>tap</i> to jump / double jump.</div>
+                <div class="line"></div>
+                <div id="start-button">Start</div>
+                <div class="line"></div>
+                <div>Music: <i>Chibi Ninja</i> by <a href="http://ericskiff.com/music/">Eric Skiff</a>.</div>
+            </div>
+            <canvas id="game"></canvas>
         </div>
-        <canvas id="game"></canvas>
     </body>
 </html>

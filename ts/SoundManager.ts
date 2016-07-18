@@ -3,6 +3,9 @@ namespace SoundManager {
     export let jump: HTMLAudioElement;
     export let death: HTMLAudioElement;
 
+    let muted: boolean = false;
+    let volumeBackups: {[id: string]: number} = {};
+
     const ASSET_TYPE = "sounds";
 
     function loadAudio(response: any, name: string): HTMLAudioElement {
@@ -10,6 +13,7 @@ namespace SoundManager {
         const audio = new Audio(audioData["path"]);
         audio.loop = audioData["loop"];
         audio.volume = audioData["volume"];
+        volumeBackups[name] = audio.volume;
         return audio;
     }
 
@@ -26,5 +30,27 @@ namespace SoundManager {
         };
         soundRequest.open("GET", GameManager.getAssetFile(ASSET_TYPE), true);
         soundRequest.send();
+    }
+
+    function mute(): void {
+        background.volume = 0;
+        jump.volume = 0;
+        death.volume = 0;
+        muted = true;
+    }
+
+    function unmute(): void {
+        background.volume = volumeBackups["background"];
+        jump.volume = volumeBackups["jump"];
+        death.volume = volumeBackups["death"];
+        muted = false;
+    }
+
+    export function toggleMute(): void {
+        if (muted) {
+            unmute();
+        } else {
+            mute();
+        }
     }
 }
