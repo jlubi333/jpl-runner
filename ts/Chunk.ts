@@ -53,15 +53,15 @@ class Chunk {
         for (let row = 0; row < this.tileArray.length; row++) {
             for (let col = leftBound; col < rightBound; col++) {
                 let tileInfo = this.tileArray[row][col];
-                CanvasUtilities.fillStrokeRect(
+                CanvasUtilities.scaledRect(
                     ctx,
                     tileInfo.getFillStyle(),
                     tileInfo.getStrokeStyle(),
-                    col * ChunkManager.tileSize + offset,
-                    row * ChunkManager.tileSize,
-                    ChunkManager.tileSize,
-                    ChunkManager.tileSize,
-                    1
+                    col + offset,
+                    row ,
+                    1,
+                    1,
+                    1 / Scale.scale
                 );
             }
         }

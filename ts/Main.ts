@@ -14,14 +14,11 @@ namespace Main {
     export function loadGame() {
         game = new Game(10,
                         0.5,
-                        100 * ChunkManager.tileSize);
+                        100);
         player = new Player(game,
-                            new BoundingBox(3 * ChunkManager.tileSize,
-                                            -ChunkManager.tileSize,
-                                            ChunkManager.tileSize,
-                                            ChunkManager.tileSize),
+                            new BoundingBox(3, -1, 1,1),
                             new Vector(0, 0),
-                            30 * ChunkManager.tileSize,
+                            30,
                             2);
         game.player = player;
         looper = new Looper(1/60, game, game, ctx);
@@ -33,7 +30,7 @@ namespace Main {
 
         let handleResize = () => {
             CanvasUtilities.fitCanvasToWindow(gameCanvas);
-            ChunkManager.tileSize = window.innerHeight / ChunkManager.chunkHeight;
+            Scale.scale = window.innerHeight / ChunkManager.chunkHeight;
         }
         window.onresize = (event) => {
             handleResize();

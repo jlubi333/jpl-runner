@@ -18,13 +18,9 @@ class Player implements Updatable, Renderable {
         this.grounded = false;
         if (this.collidesWithMap(CollisionDirection.Y)) {
             if (this.velocity.y < 0) {
-                this.bb.y =
-                    Math.ceil(this.bb.y / ChunkManager.tileSize)
-                        * ChunkManager.tileSize;
+                this.bb.y = Math.ceil(this.bb.y);
             } else if (this.velocity.y > 0) {
-                this.bb.y =
-                    Math.floor(this.bb.bottom() / ChunkManager.tileSize)
-                        * ChunkManager.tileSize - this.bb.height;
+                this.bb.y = Math.floor(this.bb.bottom()) - this.bb.height;
                 this.grounded = true;
                 this.jumpsLeft = this.maxJumps;
             }
@@ -38,14 +34,14 @@ class Player implements Updatable, Renderable {
             this.bb.y + this.bb.height / 2
         );
 
-        if (this.bb.y > window.innerHeight ||
+        if (Scale.convert(this.bb.y) > window.innerHeight ||
             (currentTileInfo != null && currentTileInfo.isBlocked())) {
             this.die();
         }
     }
 
     public render(ctx: CanvasRenderingContext2D): void {
-        CanvasUtilities.fillStrokeRect(
+        CanvasUtilities.scaledRect(
             ctx,
             "#00C6FF",
             "#FFFFFF",
@@ -53,7 +49,7 @@ class Player implements Updatable, Renderable {
             this.bb.y,
             this.bb.width,
             this.bb.height,
-            1
+            1 / Scale.scale
         );
     }
 

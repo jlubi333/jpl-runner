@@ -4,19 +4,24 @@ namespace CanvasUtilities {
         canvas.height = window.innerHeight;
     }
 
-    export function fillStrokeRect(ctx: CanvasRenderingContext2D,
-                                   fillStyle: string,
-                                   strokeStyle: string,
-                                   x: number,
-                                   y: number,
-                                   width: number,
-                                   height: number,
-                                   lineWidth: number): void {
+    export function scaledRect(ctx: CanvasRenderingContext2D,
+                               fillStyle: string,
+                               strokeStyle: string,
+                               x: number,
+                               y: number,
+                               width: number,
+                               height: number,
+                               lineWidth: number): void {
+        let scx = Scale.convert(x);
+        let scy = Scale.convert(y);
+        let scw = Scale.convert(width);
+        let sch = Scale.convert(height);
+        let sclw = Scale.convert(lineWidth);
         ctx.fillStyle = fillStyle;
-        ctx.fillRect(x, y, width, height);
+        ctx.fillRect(scx, scy, scw, sch);
         ctx.strokeStyle = strokeStyle;
-        ctx.lineWidth = lineWidth;
-        ctx.strokeRect(x, y, width, height);
+        ctx.lineWidth = sclw;
+        ctx.strokeRect(scx, scy, scw, sch);
     }
 
     export function clear(ctx: CanvasRenderingContext2D) {

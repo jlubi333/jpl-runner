@@ -45,7 +45,7 @@ var Chunk = (function () {
         for (var row = 0; row < this.tileArray.length; row++) {
             for (var col = leftBound; col < rightBound; col++) {
                 var tileInfo = this.tileArray[row][col];
-                CanvasUtilities.fillStrokeRect(ctx, tileInfo.getFillStyle(), tileInfo.getStrokeStyle(), col * ChunkManager.tileSize + offset, row * ChunkManager.tileSize, ChunkManager.tileSize, ChunkManager.tileSize, 1);
+                CanvasUtilities.scaledRect(ctx, tileInfo.getFillStyle(), tileInfo.getStrokeStyle(), col + offset, row, 1, 1, 1 / Scale.scale);
             }
         }
     };
@@ -109,9 +109,9 @@ var Game = (function () {
     Game.prototype.update = function (dt) {
         this.tileSpeed += this.speedMultiplier * dt;
         this.score += 100 * dt;
-        this.offset += this.tileSpeed * ChunkManager.tileSize * dt;
-        if (this.offset >= ChunkManager.tileSize) {
-            this.offset -= ChunkManager.tileSize;
+        this.offset += this.tileSpeed * dt;
+        if (this.offset >= 1) {
+            this.offset -= 1;
             this.offsetTile += 1;
         }
         if (this.offsetTile >= ChunkManager.chunkWidth) {
@@ -123,10 +123,9 @@ var Game = (function () {
     };
     Game.prototype.render = function (ctx) {
         CanvasUtilities.clear(ctx);
-        this.currentChunk.render(ctx, this.offsetTile, ChunkManager.chunkWidth, -this.offsetTile * ChunkManager.tileSize
-            - this.offset);
-        this.nextChunk.render(ctx, 0, ChunkManager.chunkWidth, ChunkManager.chunkWidth * ChunkManager.tileSize
-            - this.offsetTile * ChunkManager.tileSize
+        this.currentChunk.render(ctx, this.offsetTile, ChunkManager.chunkWidth, -this.offsetTile - this.offset);
+        this.nextChunk.render(ctx, 0, ChunkManager.chunkWidth, ChunkManager.chunkWidth
+            - this.offsetTile
             - this.offset);
         this.player.render(ctx);
         ctx.font = "18px Inconsolata";
@@ -137,8 +136,8 @@ var Game = (function () {
         }
     };
     Game.prototype.tileInformationFromCoordinate = function (x, y) {
-        var row = Math.floor(y / ChunkManager.tileSize);
-        var col = Math.floor(x / ChunkManager.tileSize);
+        var row = Math.floor(y);
+        var col = Math.floor(x);
         if (row >= ChunkManager.chunkHeight || row < 0 ||
             col >= ChunkManager.chunkWidth || col < 0) {
             return null;
@@ -295,8 +294,8 @@ var Main;
     }
     Main.restart = restart;
     function loadGame() {
-        game = new Game(10, 0.5, 100 * ChunkManager.tileSize);
-        player = new Player(game, new BoundingBox(3 * ChunkManager.tileSize, -ChunkManager.tileSize, ChunkManager.tileSize, ChunkManager.tileSize), new Vector(0, 0), 30 * ChunkManager.tileSize, 2);
+        game = new Game(10, 0.5, 100);
+        player = new Player(game, new BoundingBox(3, -1, 1, 1), new Vector(0, 0), 30, 2);
         game.player = player;
         looper = new Looper(1 / 60, game, game, ctx);
     }
@@ -306,7 +305,7 @@ var Main;
         ctx = gameCanvas.getContext("2d");
         var handleResize = function () {
             CanvasUtilities.fitCanvasToWindow(gameCanvas);
-            ChunkManager.tileSize = window.innerHeight / ChunkManager.chunkHeight;
+            Scale.scale = window.innerHeight / ChunkManager.chunkHeight;
         };
         window.onresize = function (event) {
             handleResize();
@@ -371,14 +370,10 @@ var Player = (function () {
         this.grounded = false;
         if (this.collidesWithMap(CollisionDirection.Y)) {
             if (this.velocity.y < 0) {
-                this.bb.y =
-                    Math.ceil(this.bb.y / ChunkManager.tileSize)
-                        * ChunkManager.tileSize;
+                this.bb.y = Math.ceil(this.bb.y);
             }
             else if (this.velocity.y > 0) {
-                this.bb.y =
-                    Math.floor(this.bb.bottom() / ChunkManager.tileSize)
-                        * ChunkManager.tileSize - this.bb.height;
+                this.bb.y = Math.floor(this.bb.bottom()) - this.bb.height;
                 this.grounded = true;
                 this.jumpsLeft = this.maxJumps;
             }
@@ -386,13 +381,13 @@ var Player = (function () {
         }
         this.handleInput();
         var currentTileInfo = this.game.tileInformationFromCoordinate(this.bb.x + this.bb.width / 2, this.bb.y + this.bb.height / 2);
-        if (this.bb.y > window.innerHeight ||
+        if (Scale.convert(this.bb.y) > window.innerHeight ||
             (currentTileInfo != null && currentTileInfo.isBlocked())) {
             this.die();
         }
     };
     Player.prototype.render = function (ctx) {
-        CanvasUtilities.fillStrokeRect(ctx, "#00C6FF", "#FFFFFF", this.bb.x, this.bb.y, this.bb.width, this.bb.height, 1);
+        CanvasUtilities.scaledRect(ctx, "#00C6FF", "#FFFFFF", this.bb.x, this.bb.y, this.bb.width, this.bb.height, 1 / Scale.scale);
     };
     Player.prototype.collidesWithMap = function (d) {
         var tileInfo;
@@ -453,6 +448,13 @@ var SaveState;
     }
     SaveState.getHighScore = getHighScore;
 })(SaveState || (SaveState = {}));
+var Scale;
+(function (Scale) {
+    function convert(a) {
+        return a * Scale.scale;
+    }
+    Scale.convert = convert;
+})(Scale || (Scale = {}));
 var SoundManager;
 (function (SoundManager) {
     var ASSET_TYPE = "sounds";
@@ -484,14 +486,19 @@ var CanvasUtilities;
         canvas.height = window.innerHeight;
     }
     CanvasUtilities.fitCanvasToWindow = fitCanvasToWindow;
-    function fillStrokeRect(ctx, fillStyle, strokeStyle, x, y, width, height, lineWidth) {
+    function scaledRect(ctx, fillStyle, strokeStyle, x, y, width, height, lineWidth) {
+        var scx = Scale.convert(x);
+        var scy = Scale.convert(y);
+        var scw = Scale.convert(width);
+        var sch = Scale.convert(height);
+        var sclw = Scale.convert(lineWidth);
         ctx.fillStyle = fillStyle;
-        ctx.fillRect(x, y, width, height);
+        ctx.fillRect(scx, scy, scw, sch);
         ctx.strokeStyle = strokeStyle;
-        ctx.lineWidth = lineWidth;
-        ctx.strokeRect(x, y, width, height);
+        ctx.lineWidth = sclw;
+        ctx.strokeRect(scx, scy, scw, sch);
     }
-    CanvasUtilities.fillStrokeRect = fillStrokeRect;
+    CanvasUtilities.scaledRect = scaledRect;
     function clear(ctx) {
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     }

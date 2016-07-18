@@ -21,9 +21,9 @@ class Game implements Updatable, Renderable {
         this.tileSpeed += this.speedMultiplier * dt;
         this.score += 100 * dt;
 
-        this.offset += this.tileSpeed * ChunkManager.tileSize * dt;
-        if (this.offset >= ChunkManager.tileSize) {
-            this.offset -= ChunkManager.tileSize;
+        this.offset += this.tileSpeed * dt;
+        if (this.offset >= 1) {
+            this.offset -= 1;
             this.offsetTile += 1;
         }
         if (this.offsetTile >= ChunkManager.chunkWidth) {
@@ -41,13 +41,12 @@ class Game implements Updatable, Renderable {
         this.currentChunk.render(ctx,
                                  this.offsetTile,
                                  ChunkManager.chunkWidth,
-                                 -this.offsetTile * ChunkManager.tileSize
-                                     - this.offset);
+                                 -this.offsetTile - this.offset);
         this.nextChunk.render(ctx,
                               0,
                               ChunkManager.chunkWidth,
-                              ChunkManager.chunkWidth * ChunkManager.tileSize
-                                  - this.offsetTile * ChunkManager.tileSize
+                              ChunkManager.chunkWidth
+                                  - this.offsetTile
                                   - this.offset);
 
         this.player.render(ctx);
@@ -66,8 +65,8 @@ class Game implements Updatable, Renderable {
 
     public tileInformationFromCoordinate(x: number,
                                          y: number): TileInformation {
-        let row = Math.floor(y / ChunkManager.tileSize);
-        let col = Math.floor(x / ChunkManager.tileSize);
+        let row = Math.floor(y);
+        let col = Math.floor(x);
 
         if (row >= ChunkManager.chunkHeight || row < 0 ||
             col >= ChunkManager.chunkWidth || col < 0) {
