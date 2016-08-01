@@ -54,11 +54,27 @@ namespace SoundManager {
      */
     export function mobileInit(): void {
         background.play();
-        background.pause();
+        stopSound(background)
         jump.play();
-        jump.pause();
+        stopSound(jump)
         death.play();
-        death.pause();
+        stopSound(death)
+
+    }
+
+    export function blur(): void {
+        background.pause();
+        stopSound(death)
+        stopSound(jump)
+    }
+
+    export function focus(): void {
+        background.play();
+    }
+
+    export function stopSound(sound: HTMLAudioElement): void {
+        sound.pause();
+        sound.currentTime = 0;
     }
 
     function mute(): void {

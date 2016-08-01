@@ -374,10 +374,10 @@ var Main;
     Main.init = init;
     window.onload = function (event) { return GameManager.init(function () { return init(); }); };
     window.onblur = function (event) {
-        SoundManager.background.pause();
+        SoundManager.blur();
     };
     window.onfocus = function (event) {
-        SoundManager.background.play();
+        SoundManager.focus();
     };
 })(Main || (Main = {}));
 var MathUtilities;
@@ -588,13 +588,28 @@ var SoundManager;
      */
     function mobileInit() {
         SoundManager.background.play();
-        SoundManager.background.pause();
+        stopSound(SoundManager.background);
         SoundManager.jump.play();
-        SoundManager.jump.pause();
+        stopSound(SoundManager.jump);
         SoundManager.death.play();
-        SoundManager.death.pause();
+        stopSound(SoundManager.death);
     }
     SoundManager.mobileInit = mobileInit;
+    function blur() {
+        SoundManager.background.pause();
+        stopSound(SoundManager.death);
+        stopSound(SoundManager.jump);
+    }
+    SoundManager.blur = blur;
+    function focus() {
+        SoundManager.background.play();
+    }
+    SoundManager.focus = focus;
+    function stopSound(sound) {
+        sound.pause();
+        sound.currentTime = 0;
+    }
+    SoundManager.stopSound = stopSound;
     function mute() {
         SoundManager.background.volume = 0;
         SoundManager.jump.volume = 0;
