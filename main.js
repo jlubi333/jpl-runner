@@ -595,14 +595,20 @@ var SoundManager;
         stopSound(SoundManager.death);
     }
     SoundManager.mobileInit = mobileInit;
+    var wasMuted = muted;
     function blur() {
         SoundManager.background.pause();
         stopSound(SoundManager.death);
         stopSound(SoundManager.jump);
+        wasMuted = muted;
+        mute();
     }
     SoundManager.blur = blur;
     function focus() {
         SoundManager.background.play();
+        if (!wasMuted) {
+            unmute();
+        }
     }
     SoundManager.focus = focus;
     function stopSound(sound) {

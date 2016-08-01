@@ -62,14 +62,20 @@ namespace SoundManager {
 
     }
 
+    let wasMuted: boolean = muted;
     export function blur(): void {
         background.pause();
         stopSound(death)
         stopSound(jump)
+        wasMuted = muted;
+        mute();
     }
 
     export function focus(): void {
         background.play();
+        if (!wasMuted) {
+            unmute();
+        }
     }
 
     export function stopSound(sound: HTMLAudioElement): void {
