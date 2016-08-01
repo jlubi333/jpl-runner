@@ -35,7 +35,6 @@ namespace SoundManager {
 
             if (SaveState.getMute()) {
                 muteButton.click();
-                console.log('"a"')
             }
 
             callback();
