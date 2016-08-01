@@ -67,10 +67,20 @@ namespace Main {
 
     window.onload = (event) => GameManager.init(() => init());
 
-    window.onblur = (event) => {
+    function blur(): void {
         SoundManager.blur();
-    };
-    window.onfocus = (event) => {
+    }
+    function focus(): void {
         SoundManager.focus();
     }
+
+    window.onblur = (event) => blur();
+    window.onfocus = (event) => focus();
+    window.addEventListener("visibilitychange", (event) => {
+        if (document.hidden) {
+            blur();
+        } else {
+            focus();
+        }
+    });
 }

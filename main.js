@@ -373,12 +373,22 @@ var Main;
     }
     Main.init = init;
     window.onload = function (event) { return GameManager.init(function () { return init(); }); };
-    window.onblur = function (event) {
+    function blur() {
         SoundManager.blur();
-    };
-    window.onfocus = function (event) {
+    }
+    function focus() {
         SoundManager.focus();
-    };
+    }
+    window.onblur = function (event) { return blur(); };
+    window.onfocus = function (event) { return focus(); };
+    window.addEventListener("visibilitychange", function (event) {
+        if (document.hidden) {
+            blur();
+        }
+        else {
+            focus();
+        }
+    });
 })(Main || (Main = {}));
 var MathUtilities;
 (function (MathUtilities) {
