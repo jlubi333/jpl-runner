@@ -518,6 +518,14 @@ var SaveState;
         return window.localStorage.getItem("highScore" + VERSION);
     }
     SaveState.getHighScore = getHighScore;
+    function setMute(mute) {
+        window.localStorage.setItem("mute", mute ? "1" : "0");
+    }
+    SaveState.setMute = setMute;
+    function getMute() {
+        return window.localStorage.getItem("mute") == "1";
+    }
+    SaveState.getMute = getMute;
 })(SaveState || (SaveState = {}));
 var Scale;
 (function (Scale) {
@@ -554,7 +562,7 @@ var ScoreUtilities;
 var SoundManager;
 (function (SoundManager) {
     var muteButton;
-    var muted = false;
+    var muted;
     var volumeBackups = {};
     var ASSET_TYPE = "sounds";
     function loadAudio(response, name) {
@@ -572,14 +580,18 @@ var SoundManager;
             SoundManager.background = loadAudio(response, "background");
             SoundManager.jump = loadAudio(response, "jump");
             SoundManager.death = loadAudio(response, "death");
+            muteButton = document.getElementById("mute-button");
+            muteButton.onclick = function (event) {
+                toggleMute();
+            };
+            if (SaveState.getMute()) {
+                muteButton.click();
+                console.log('"a"');
+            }
             callback();
         };
         soundRequest.open("GET", GameManager.getAssetFile(ASSET_TYPE), true);
         soundRequest.send();
-        muteButton = document.getElementById("mute-button");
-        muteButton.onclick = function (event) {
-            toggleMute();
-        };
     }
     SoundManager.init = init;
     function toggleMute() {
@@ -605,7 +617,7 @@ var SoundManager;
         stopSound(SoundManager.death);
     }
     SoundManager.mobileInit = mobileInit;
-    var wasMuted = muted;
+    var wasMuted;
     function blur() {
         SoundManager.background.pause();
         stopSound(SoundManager.death);
@@ -631,11 +643,13 @@ var SoundManager;
         SoundManager.jump.volume = 0;
         SoundManager.death.volume = 0;
         muted = true;
+        SaveState.setMute(true);
     }
     function unmute() {
         SoundManager.background.volume = volumeBackups["background"];
         SoundManager.jump.volume = volumeBackups["jump"];
         SoundManager.death.volume = volumeBackups["death"];
         muted = false;
+        SaveState.setMute(false);
     }
 })(SoundManager || (SoundManager = {}));

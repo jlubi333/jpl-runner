@@ -4,7 +4,7 @@ namespace SoundManager {
     export let death: HTMLAudioElement;
 
     let muteButton: HTMLElement;
-    let muted: boolean = false;
+    let muted: boolean;
     let volumeBackups: {[id: string]: number} = {};
 
     const ASSET_TYPE = "sounds";
@@ -27,16 +27,22 @@ namespace SoundManager {
             jump = loadAudio(response, "jump");
             death = loadAudio(response, "death");
 
+            muteButton = document.getElementById("mute-button");
+
+            muteButton.onclick = (event) => {
+                toggleMute();
+            }
+
+            if (SaveState.getMute()) {
+                muteButton.click();
+                console.log('"a"')
+            }
+
             callback();
         };
         soundRequest.open("GET", GameManager.getAssetFile(ASSET_TYPE), true);
         soundRequest.send();
 
-        muteButton = document.getElementById("mute-button");
-
-        muteButton.onclick = (event) => {
-            toggleMute();
-        }
     }
 
     export function toggleMute(): void {
@@ -62,7 +68,7 @@ namespace SoundManager {
 
     }
 
-    let wasMuted: boolean = muted;
+    let wasMuted: boolean;
     export function blur(): void {
         background.pause();
         stopSound(death)
@@ -88,6 +94,7 @@ namespace SoundManager {
         jump.volume = 0;
         death.volume = 0;
         muted = true;
+        SaveState.setMute(true);
     }
 
     function unmute(): void {
@@ -95,5 +102,6 @@ namespace SoundManager {
         jump.volume = volumeBackups["jump"];
         death.volume = volumeBackups["death"];
         muted = false;
+        SaveState.setMute(false);
     }
 }
