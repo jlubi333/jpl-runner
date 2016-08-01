@@ -138,7 +138,6 @@ var Game = (function () {
         for (var i = 0; i < chunkRenderDistance; i++) {
             this.chunkQueue.push(ChunkManager.generateRandomChunk());
         }
-        SoundManager.background.play();
     }
     Game.prototype.update = function (dt) {
         this.tileSpeed += this.speedMultiplier * dt;
@@ -367,6 +366,8 @@ var Main;
             startPanel.style.display = "none";
             gameInfo.style.display = "block";
             gameCanvas.style.display = "block";
+            SoundManager.mobileInit();
+            SoundManager.background.play();
             looper.start();
         };
     }
@@ -565,6 +566,29 @@ var SoundManager;
         };
     }
     SoundManager.init = init;
+    function toggleMute() {
+        if (muted) {
+            unmute();
+            muteButton.innerHTML = "Mute";
+        }
+        else {
+            mute();
+            muteButton.innerHTML = "Unmute";
+        }
+    }
+    SoundManager.toggleMute = toggleMute;
+    /*
+     * Note: *MUST* be called from within user click function stack
+     */
+    function mobileInit() {
+        SoundManager.background.play();
+        SoundManager.background.pause();
+        SoundManager.jump.play();
+        SoundManager.jump.pause();
+        SoundManager.death.play();
+        SoundManager.death.pause();
+    }
+    SoundManager.mobileInit = mobileInit;
     function mute() {
         SoundManager.background.volume = 0;
         SoundManager.jump.volume = 0;
@@ -577,15 +601,4 @@ var SoundManager;
         SoundManager.death.volume = volumeBackups["death"];
         muted = false;
     }
-    function toggleMute() {
-        if (muted) {
-            unmute();
-            muteButton.innerHTML = "Mute";
-        }
-        else {
-            mute();
-            muteButton.innerHTML = "Unmute";
-        }
-    }
-    SoundManager.toggleMute = toggleMute;
 })(SoundManager || (SoundManager = {}));

@@ -16,7 +16,6 @@ class Game implements Updatable, Renderable {
         for (let i = 0; i < chunkRenderDistance; i++) {
             this.chunkQueue.push(ChunkManager.generateRandomChunk());
         }
-        SoundManager.background.play();
     }
 
     public update(dt: number): void {

@@ -39,6 +39,28 @@ namespace SoundManager {
         }
     }
 
+    export function toggleMute(): void {
+        if (muted) {
+            unmute();
+            muteButton.innerHTML = "Mute";
+        } else {
+            mute();
+            muteButton.innerHTML = "Unmute";
+        }
+    }
+
+    /*
+     * Note: *MUST* be called from within user click function stack
+     */
+    export function mobileInit(): void {
+        background.play();
+        background.pause();
+        jump.play();
+        jump.pause();
+        death.play();
+        death.pause();
+    }
+
     function mute(): void {
         background.volume = 0;
         jump.volume = 0;
@@ -51,15 +73,5 @@ namespace SoundManager {
         jump.volume = volumeBackups["jump"];
         death.volume = volumeBackups["death"];
         muted = false;
-    }
-
-    export function toggleMute(): void {
-        if (muted) {
-            unmute();
-            muteButton.innerHTML = "Mute";
-        } else {
-            mute();
-            muteButton.innerHTML = "Unmute";
-        }
     }
 }

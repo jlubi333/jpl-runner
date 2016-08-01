@@ -59,6 +59,8 @@ namespace Main {
             startPanel.style.display = "none";
             gameInfo.style.display = "block";
             gameCanvas.style.display = "block";
+            SoundManager.mobileInit();
+            SoundManager.background.play();
             looper.start();
         }
     }
