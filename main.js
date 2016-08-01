@@ -373,6 +373,12 @@ var Main;
     }
     Main.init = init;
     window.onload = function (event) { return GameManager.init(function () { return init(); }); };
+    window.onblur = function (event) {
+        SoundManager.background.pause();
+    };
+    window.onfocus = function (event) {
+        SoundManager.background.play();
+    };
 })(Main || (Main = {}));
 var MathUtilities;
 (function (MathUtilities) {

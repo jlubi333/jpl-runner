@@ -66,4 +66,11 @@ namespace Main {
     }
 
     window.onload = (event) => GameManager.init(() => init());
+
+    window.onblur = (event) => {
+        SoundManager.background.pause();
+    };
+    window.onfocus = (event) => {
+        SoundManager.background.play();
+    }
 }
