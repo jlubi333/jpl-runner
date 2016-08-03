@@ -10,24 +10,24 @@ namespace Mouse {
         pos = initialPos;
         mouseDown = false;
 
-        parentElement.onmousemove = (event) => {
+        parentElement.addEventListener("mousemove", (event) => {
             pos.x = event.pageX;
             pos.y = event.pageY;
-        };
+        });
 
-        parentElement.onmousedown = (event) => {
+        parentElement.addEventListener("mousedown", (event) => {
             mouseDown = true;
-        };
-        parentElement.ontouchstart = (event: UIEvent) => {
+        });
+        parentElement.addEventListener("touchstart", (event: UIEvent) => {
             mouseDown = true;
-        };
+        });
 
-        parentElement.onmouseup = (event) => {
+        parentElement.addEventListener("mouseup", (event) => {
             mouseDown = false;
-        };
-        parentElement.ontouchend = (event: UIEvent) => {
+        });
+        parentElement.addEventListener("touchend", (event: UIEvent) => {
             mouseDown = false;
-        };
+        });
     }
 
     export function isMouseDown(): boolean {
@@ -43,11 +43,11 @@ namespace Keyboard {
         return keysDown[keyCode] == true;
     }
 
-    window.onkeydown = (event) => {
+    window.addEventListener("keydown", (event) => {
         keysDown[event.keyCode] = true;
-    }
+    });
 
-    window.onkeyup = (event) => {
+    window.addEventListener("keyup", (event) => {
         keysDown[event.keyCode] = false;
-    }
+    });
 }

@@ -236,22 +236,22 @@ var Mouse;
         if (initialPos === void 0) { initialPos = new Vector(window.innerWidth / 2, window.innerHeight / 2); }
         Mouse.pos = initialPos;
         mouseDown = false;
-        parentElement.onmousemove = function (event) {
+        parentElement.addEventListener("mousemove", function (event) {
             Mouse.pos.x = event.pageX;
             Mouse.pos.y = event.pageY;
-        };
-        parentElement.onmousedown = function (event) {
+        });
+        parentElement.addEventListener("mousedown", function (event) {
             mouseDown = true;
-        };
-        parentElement.ontouchstart = function (event) {
+        });
+        parentElement.addEventListener("touchstart", function (event) {
             mouseDown = true;
-        };
-        parentElement.onmouseup = function (event) {
+        });
+        parentElement.addEventListener("mouseup", function (event) {
             mouseDown = false;
-        };
-        parentElement.ontouchend = function (event) {
+        });
+        parentElement.addEventListener("touchend", function (event) {
             mouseDown = false;
-        };
+        });
     }
     Mouse.handle = handle;
     function isMouseDown() {
@@ -267,12 +267,12 @@ var Keyboard;
         return keysDown[keyCode] == true;
     }
     Keyboard.isKeyDown = isKeyDown;
-    window.onkeydown = function (event) {
+    window.addEventListener("keydown", function (event) {
         keysDown[event.keyCode] = true;
-    };
-    window.onkeyup = function (event) {
+    });
+    window.addEventListener("keyup", function (event) {
         keysDown[event.keyCode] = false;
-    };
+    });
 })(Keyboard || (Keyboard = {}));
 var Looper = (function () {
     function Looper(fixedTimestep, updatable, renderable, ctx) {
@@ -346,9 +346,9 @@ var Main;
             CanvasUtilities.fitCanvasToWindow(gameCanvas);
             Scale.scale = window.innerHeight / ChunkManager.chunkHeight;
         };
-        window.onresize = function (event) {
+        window.addEventListener("resize", function (event) {
             handleResize();
-        };
+        });
         handleResize();
         Mouse.handle(gameCanvas);
         ctx.font;
@@ -372,21 +372,27 @@ var Main;
         };
     }
     Main.init = init;
-    window.onload = function (event) { return GameManager.init(function () { return init(); }); };
+    window.addEventListener("load", function (event) { return GameManager.init(function () { return init(); }); });
     function blur() {
         SoundManager.blur();
     }
     function focus() {
         SoundManager.focus();
     }
-    window.onblur = function (event) { return blur(); };
-    window.onfocus = function (event) { return focus(); };
+    window.addEventListener("blur", function (event) { return blur(); });
+    window.addEventListener("focus", function (event) { return focus(); });
     window.addEventListener("visibilitychange", function (event) {
         if (document.hidden) {
             blur();
         }
         else {
             focus();
+        }
+    });
+    var M_KEY = 77;
+    window.addEventListener("keydown", function (event) {
+        if (event.keyCode == M_KEY) {
+            SoundManager.toggleMute();
         }
     });
 })(Main || (Main = {}));

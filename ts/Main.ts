@@ -33,9 +33,9 @@ namespace Main {
             CanvasUtilities.fitCanvasToWindow(gameCanvas);
             Scale.scale = window.innerHeight / ChunkManager.chunkHeight;
         }
-        window.onresize = (event) => {
+        window.addEventListener("resize", (event) => {
             handleResize();
-        };
+        });
         handleResize();
 
         Mouse.handle(gameCanvas);
@@ -65,7 +65,7 @@ namespace Main {
         }
     }
 
-    window.onload = (event) => GameManager.init(() => init());
+    window.addEventListener("load", (event) => GameManager.init(() => init()));
 
     function blur(): void {
         SoundManager.blur();
@@ -74,13 +74,20 @@ namespace Main {
         SoundManager.focus();
     }
 
-    window.onblur = (event) => blur();
-    window.onfocus = (event) => focus();
+    window.addEventListener("blur", (event) => blur());
+    window.addEventListener("focus", (event) => focus());
     window.addEventListener("visibilitychange", (event) => {
         if (document.hidden) {
             blur();
         } else {
             focus();
+        }
+    });
+
+    const M_KEY = 77;
+    window.addEventListener("keydown", (event) => {
+        if (event.keyCode == M_KEY) {
+            SoundManager.toggleMute();
         }
     });
 }
